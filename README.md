@@ -2,5 +2,5 @@
 
 Collaborative Maze Exploration and Path Planning
 
-[Project Proposal](./project-proposal.pdf)
-[Milestone 1 Report](./milestone-1-report.pdf)
+[Project Proposal](./project-proposal.pdf)\
+[Milestone 1 Report](./milestone-1-report.pdf)\

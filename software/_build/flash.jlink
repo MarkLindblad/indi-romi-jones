@@ -1,0 +1,5 @@
+r
+loadfile _build/software_sdk15_blank.hex 
+r
+g
+exit

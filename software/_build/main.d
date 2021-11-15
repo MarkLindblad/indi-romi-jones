@@ -105,6 +105,9 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_spim.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_spi.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_spi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/uart/app_uart.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uart.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uarte.h \
  /home/student/search-and-rescue/software/boards/buckler_revC/./buckler.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_saadc.h \
  /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/nhd_display/display.h \

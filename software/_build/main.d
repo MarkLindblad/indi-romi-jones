@@ -105,9 +105,41 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_spim.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_spi.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_spi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/pwm/app_pwm.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/integration/nrfx/legacy/nrf_drv_timer.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_timer.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_timer.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/integration/nrfx/legacy/nrf_drv_ppi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_ppi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_ppi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/uart/app_uart.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uart.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uarte.h \
  /home/student/search-and-rescue/software/boards/buckler_revC/./buckler.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_saadc.h \
  /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/nhd_display/display.h \
- nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/uart/app_uart.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiActuator.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiUART.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiSensorPoll.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiSensorTypes.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiSensor.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiSensorTypes.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/kobuki/kobukiUtilities.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/lsm9ds1/lsm9ds1.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/twi_mngr/nrf_twi_mngr.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/integration/nrfx/legacy/nrf_drv_twi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_twim.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_twim.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_twi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_twi.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/queue/nrf_queue.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/lsm9ds1/lsm9ds1_registers.h \
+ /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/lsm9ds1/lsm9ds1_types.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/serial/nrf_serial.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/integration/nrfx/legacy/nrf_drv_uart.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_uarte.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uarte.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/include/nrfx_uart.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uart.h \
- nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uarte.h
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/mutex/nrf_mtx.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/atomic/nrf_atomic.h

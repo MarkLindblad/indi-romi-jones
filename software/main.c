@@ -1,6 +1,4 @@
-// Robot Template app
-//
-// Framework for creating applications that control the Kobuki robot
+
 
 #include <math.h>
 #include <stdbool.h>
@@ -40,8 +38,8 @@
 #include "kobukiUtilities.h"
 #include "lsm9ds1.h"
 #include <nrf_serial.h>
-// #include <unistd.h>
-// #include "ydlidar_sdk.h"
+
+#include "YDLidar.h"
 
 
 
@@ -104,7 +102,6 @@ typedef enum {
 
 
 int main(void) {
-
   uint32_t err_code;
   APP_UART_FIFO_INIT(&comm_params,
                      UART_RX_BUF_SIZE,
@@ -181,17 +178,23 @@ int main(void) {
   while (true)
   {
 
-    while (app_uart_get(cr + i) != NRF_SUCCESS);
-    // printf("%X",cr[i] );
-    i++;
-    if (i >=32) {
-      for (int i = 0; i < 32; i++) {
-        printf("%X",cr[i]);
-      }
-      printf("\n");
-      i = 0;
-      uint8_t cr[32] = {0};
-      app_uart_flush();
+    // while (app_uart_get(cr + i) != NRF_SUCCESS);
+    // // printf("%X",cr[i] );
+    // i++;
+    // if (i >=32) {
+    //   for (int i = 0; i < 32; i++) {
+    //     printf("%X",cr[i]);
+    //   }
+    //   printf("\n");
+    //   i = 0;
+    //   uint8_t cr[32] = {0};
+    //   app_uart_flush();
+     if (waitScanDot(500) == RESULT_OK){
+       scanPoint point = getCurrentScanPoint();
+
+       printf("angle: %.2f distance %.2f quality: %d\n",point.angle, point.distance/10, point.quality );
+     }
+     nrf_delay_ms(100);
     }
   }
 
@@ -238,7 +241,7 @@ int main(void) {
   //
   //   }
   // }
-}
+// }
 
 
 
@@ -249,7 +252,8 @@ int main(void) {
 // AA550289D9521A3614B0000000000000000000000
 // 4484C41441C42042843443C44444C45446046447047C4
 // BC4C84D04AA5501A79A317ACDB4A0000000000000000
-// 00000000000000000000000000AA551173AC0
+// 00000000000000000000000000
+// AA551173AC0
 // AA55028DAE8B791D5000000000000000000000
 // 000000000000000000000000000911951991B11B51B91
 // AA55028E5759154A6EBD1C51C91CD1D51D91E11E5

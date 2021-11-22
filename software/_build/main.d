@@ -45,7 +45,7 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/mdk/nrf52_name_change.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/mdk/compiler_abstraction.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/sdk_errors.h \
- nrf52x-base//sdk/nrf5_sdk_15.3.0/components/drivers_nrf/nrf_soc_nosd/nrf_error.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_error.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/nordic_common.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/app_error_weak.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/timer/app_timer.h \
@@ -53,6 +53,8 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  /home/student/search-and-rescue/software/boards/buckler_revC/./app_config.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/app_util.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/mdk/compiler_abstraction.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf52/nrf_mbr.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_svc.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/nordic_common.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/delay/nrf_delay.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/nrfx.h \
@@ -66,12 +68,18 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/soc/nrfx_irqs_nrf52832.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/nrf_assert.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/app_util_platform.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_soc.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_svc.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_error.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_error_soc.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_nvic.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/nrf_assert.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/app_error.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/soc/nrfx_coredep.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/soc/nrfx_atomic.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/sdk_errors.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/sdk_resources.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_sd_def.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/nrfx_errors.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_gpio.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries//log/nrf_log.h \
@@ -143,4 +151,17 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uart.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/mutex/nrf_mtx.h \
  nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/atomic/nrf_atomic.h \
- YDLidar.h ydlidar_arduino/inc/v8stdint.h
+ YDLidar.h ydlidar_arduino/inc/v8stdint.h \
+ nrf52x-base//lib/simple_ble/simple_ble.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_types.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/ble/common/ble_advdata.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_err.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_gap.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_hci.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_ranges.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_types.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_l2cap.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_gatt.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_gattc.h \
+ nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_gatts.h

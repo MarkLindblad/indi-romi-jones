@@ -146,7 +146,7 @@ int main(void) {
 
   simple_ble_add_characteristic(1, 1, 0, 0, // read, write, notify, vlen
     sizeof(ble_distance), (uint8_t*)&ble_distance,
-    &my_service, &ble_char);
+    &robot_service, &ble_char);
 
 
 

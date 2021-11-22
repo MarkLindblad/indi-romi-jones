@@ -40,6 +40,7 @@
 #include <nrf_serial.h>
 
 #include "YDLidar.h"
+#include "simple_ble.h"
 
 
 
@@ -49,6 +50,31 @@
 //pwm instance
 APP_PWM_INSTANCE(PWM1,1);
 static volatile bool pwm_ready;            // A flag indicating PWM status.
+
+
+// BLE configuration
+// This is mostly irrelevant since we are scanning only
+static simple_ble_config_t ble_config = {
+        // BLE address is c0:98:e5:49:00:00
+        .platform_id       = 0x49,    // used as 4th octet in device BLE address
+        .device_id         = 0x1234,  // Last two octets of device address
+        .adv_name          = "Indi-Romi Jones", // irrelevant in this example
+        .adv_interval      = MSEC_TO_UNITS(1000, UNIT_0_625_MS), // send a packet once per second (minimum is 20 ms)
+        .min_conn_interval = MSEC_TO_UNITS(500, UNIT_1_25_MS), // irrelevant if advertising only
+        .max_conn_interval = MSEC_TO_UNITS(1000, UNIT_1_25_MS), // irrelevant if advertising only
+};
+simple_ble_app_t* simple_ble_app;
+
+//4607eda0-f65e-4d59-a9ff-84420d87a4ca
+static simple_ble_service_t robot_service = {{
+    .uuid128 = {0xca,0xa4,0x87,0x0d,0x42,0x84,0xff,0xA9,
+                0x59,0x4D,0x5e,0xf6,0xa0,0xed,0x07,0x46}
+}}; 
+ //0xa0ed
+static simple_ble_char_t ble_char = {.uuid16 = 0xa0ee};
+static float ble_distance = 0.0;;
+
+
 
 void pwm_ready_callback(uint32_t pwm_id)    // PWM callback function
 {
@@ -113,6 +139,16 @@ int main(void) {
 
   ret_code_t error_code = NRF_SUCCESS;
 
+  // setup ble
+  simple_ble_app = simple_ble_init(&ble_config);
+
+  simple_ble_add_service(&robot_service);
+
+  simple_ble_add_characteristic(1, 1, 0, 0, // read, write, notify, vlen
+    sizeof(ble_distance), (uint8_t*)&ble_distance,
+    &my_service, &ble_char);
+
+
 
   // initialize RTT library
   error_code = NRF_LOG_INIT(NULL);
@@ -159,7 +195,7 @@ int main(void) {
    err_code = app_pwm_init(&PWM1,&pwm1_cfg,pwm_ready_callback);
    APP_ERROR_CHECK(err_code);
 
-   lidar_speed(30);
+   lidar_speed(20);
    start_lidar();
    printf("started Lidar\n");
   // initialize Kobuki
@@ -170,6 +206,7 @@ int main(void) {
   robot_state_t state = OFF;
   KobukiSensors_t sensors = {0};
 
+  simple_ble_adv_only_name();
 
   printf("\r\nUART example started.\r\n");
   uint8_t cr[32] = {0};
@@ -191,10 +228,14 @@ int main(void) {
     //   app_uart_flush();
      if (waitScanDot(500) == RESULT_OK){
        scanPoint point = getCurrentScanPoint();
-
-       printf("angle: %.2f distance %.2f quality: %d\n",point.angle, point.distance/10, point.quality );
+       int angle = (int) point.angle % 360;
+       if ( -3 + 90 <=  angle && angle <= 3 + 90 )
+          printf("angle: %d distance %.2f quality: %d\n",angle, point.distance/10, point.quality );
+          ble_distance = point.distance;
      }
-     nrf_delay_ms(100);
+      // Sleep while SoftDevice handles BLE
+      power_manage();
+     // nrf_delay_ms(100);
     }
   }
 

@@ -59,7 +59,7 @@ static simple_ble_config_t ble_config = {
         .platform_id       = 0x49,    // used as 4th octet in device BLE address
         .device_id         = 0x1234,  // Last two octets of device address
         .adv_name          = "Indi-Romi Jones", // irrelevant in this example
-        .adv_interval      = MSEC_TO_UNITS(1000, UNIT_0_625_MS), // send a packet once per second (minimum is 20 ms)
+        .adv_interval      = MSEC_TO_UNITS(200, UNIT_0_625_MS), // send a packet once per x second (minimum is 20 ms)
         .min_conn_interval = MSEC_TO_UNITS(500, UNIT_1_25_MS), // irrelevant if advertising only
         .max_conn_interval = MSEC_TO_UNITS(1000, UNIT_1_25_MS), // irrelevant if advertising only
 };
@@ -71,8 +71,11 @@ static simple_ble_service_t robot_service = {{
                 0x59,0x4D,0x5e,0xf6,0xa0,0xed,0x07,0x46}
 }}; 
  //0xa0ed
-static simple_ble_char_t ble_char = {.uuid16 = 0xa0ee};
-static float ble_distance = 12.34;;
+static simple_ble_char_t dist_char = {.uuid16 = 0xa0ee};
+static float ble_distance = 0.0;
+
+static simple_ble_char_t angle_char = {.uuid16 = 0xa0f};
+static int ble_angle = 90;
 
 
 
@@ -129,13 +132,13 @@ typedef enum {
 
 int main(void) {
   uint32_t err_code;
-  APP_UART_FIFO_INIT(&comm_params,
-                     UART_RX_BUF_SIZE,
-                     UART_TX_BUF_SIZE,
-                     uart_error_handle,
-                     APP_IRQ_PRIORITY_LOWEST,
-                     err_code);
-  APP_ERROR_CHECK(err_code);
+  // APP_UART_FIFO_INIT(&comm_params,
+  //                    UART_RX_BUF_SIZE,
+  //                    UART_TX_BUF_SIZE,
+  //                    uart_error_handle,
+  //                    APP_IRQ_PRIORITY_LOWEST,
+  //                    err_code);
+  // APP_ERROR_CHECK(err_code);
 
   ret_code_t error_code = NRF_SUCCESS;
 
@@ -146,7 +149,11 @@ int main(void) {
 
   simple_ble_add_characteristic(1, 1, 0, 0, // read, write, notify, vlen
     sizeof(ble_distance), (uint8_t*)&ble_distance,
-    &robot_service, &ble_char);
+    &robot_service, &dist_char);
+
+  simple_ble_add_characteristic(1, 1, 0, 0, // read, write, notify, vlen
+    sizeof(ble_angle), (uint8_t*)&ble_angle,
+    &robot_service, &angle_char);
 
 
 
@@ -213,8 +220,8 @@ int main(void) {
   int i = 0;
 
   while (true)
-  {
-
+  {   ble_distance += 1;
+      ble_angle +=1;
     // while (app_uart_get(cr + i) != NRF_SUCCESS);
     // // printf("%X",cr[i] );
     // i++;
@@ -225,14 +232,14 @@ int main(void) {
     //   printf("\n");
     //   i = 0;
     //   uint8_t cr[32] = {0};
-    // //   app_uart_flush();
-    //  if (waitScanDot(500) == RESULT_OK){
-    //    scanPoint point = getCurrentScanPoint();
-    //    int angle = (int) point.angle % 360;
-    //    if ( -3 + 90 <=  angle && angle <= 3 + 90 )
-    //       printf("angle: %d distance %.2f quality: %d\n",angle, point.distance/10, point.quality );
-    //       ble_distance = point.distance;
-    //  }
+    //   app_uart_flush();
+     // if (waitScanDot(500) == RESULT_OK){
+     //   scanPoint point = getCurrentScanPoint();
+     //   int angle = (int) point.angle % 360;
+     //   if ( -3 + 0 <=  angle && angle <= 3 + 0 )
+     //      // printf("angle: %d distance %.2f quality: %d\n",angle, point.distance/10, point.quality );
+     //      ble_distance = point.distance;
+     // }
       // Sleep while SoftDevice handles BLE
       power_manage();
      // nrf_delay_ms(100);

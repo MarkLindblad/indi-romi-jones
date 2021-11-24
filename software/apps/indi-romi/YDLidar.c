@@ -83,6 +83,8 @@ result_t waitScanDot(uint32_t timeout) {
 
     while ((waitTime = millis() - startTs) <= timeout) {
       int currentByte;
+            printf("here\n");
+
       while (app_uart_get(&currentByte) != NRF_SUCCESS);
 
       if (currentByte < 0) {

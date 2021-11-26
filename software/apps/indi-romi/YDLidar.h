@@ -5,7 +5,7 @@
  * Copyright (c) 2018, EAI
  * All rights reserved.
  */
-#include "../../ydlidar_arduino/inc/v8stdint.h"
+#include "v8stdint.h"
 #include <stdint.h>
 #include <stdbool.h>
 

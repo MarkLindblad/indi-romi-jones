@@ -61,9 +61,9 @@ static simple_ble_config_t ble_config = {
         .platform_id       = 0x49,    // used as 4th octet in device BLE address
         .device_id         = 0x1234,  // Last two octets of device address
         .adv_name          = "Indi-Romi Jones", // irrelevant in this example
-        .adv_interval      = MSEC_TO_UNITS(2000, UNIT_0_625_MS), // send a packet once per x second (minimum is 20 ms)
-        .min_conn_interval = MSEC_TO_UNITS(500, UNIT_1_25_MS), // irrelevant if advertising only
-        .max_conn_interval = MSEC_TO_UNITS(1000, UNIT_1_25_MS), // irrelevant if advertising only
+        .adv_interval      = MSEC_TO_UNITS(100, UNIT_0_625_MS), // send a packet once per x second (minimum is 20 ms)
+        .min_conn_interval = MSEC_TO_UNITS(25, UNIT_1_25_MS), // irrelevant if advertising only
+        .max_conn_interval = MSEC_TO_UNITS(75, UNIT_1_25_MS), // irrelevant if advertising only
 };
 simple_ble_app_t* simple_ble_app;
 
@@ -74,10 +74,10 @@ static simple_ble_service_t robot_service = {{
 }}; 
  //0xa0ed
 static simple_ble_char_t dist_char = {.uuid16 = 0xa0ee};
-static float ble_distance = 0.0;
+static int ble_distance = 0;
 
 static simple_ble_char_t angle_char = {.uuid16 = 0xa0f};
-static int ble_angle = 90;
+static int ble_angle = 0;
 
 
 
@@ -138,8 +138,8 @@ int main(void) {
                      UART_RX_BUF_SIZE,
                      UART_TX_BUF_SIZE,
                      uart_error_handle,
-                     // APP_IRQ_PRIORITY_LOWEST,
-                     APP_IRQ_PRIORITY_HIGHEST,
+                     APP_IRQ_PRIORITY_LOWEST,
+                     // APP_IRQ_PRIORITY_HIGHEST,
                      err_code);
   APP_ERROR_CHECK(err_code);
 
@@ -205,7 +205,7 @@ int main(void) {
    err_code = app_pwm_init(&PWM1,&pwm1_cfg,pwm_ready_callback);
    APP_ERROR_CHECK(err_code);
 
-   lidar_speed(20);
+   lidar_speed(100);
    start_lidar();
    printf("started Lidar\n");
   // initialize Kobuki
@@ -216,7 +216,7 @@ int main(void) {
   robot_state_t state = OFF;
   KobukiSensors_t sensors = {0};
 
-  simple_ble_adv_only_name();
+  // simple_ble_adv_only_name();
 
   printf("\r\nUART example started.\r\n");
   uint8_t cr[32] = {0};
@@ -234,8 +234,10 @@ int main(void) {
     //   printf("\n");
     //   i = 0;
     //   uint8_t cr[32] = {0};
-      app_uart_flush();
-      printf("HERE\n");
+      // app_uart_flush();
+      // ble_distance++;
+      // ble_angle++;
+      
      if (waitScanDot(100) == RESULT_OK){
        scanPoint point = getCurrentScanPoint();
        int angle = (int) point.angle % 360;

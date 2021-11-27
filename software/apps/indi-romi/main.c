@@ -42,9 +42,8 @@
 
 
 
-#define UART_TX_BUF_SIZE 256                         /**< UART TX buffer size. */
-#define UART_RX_BUF_SIZE 256                         /**< UART RX buffer size. */
-// #define UART_RX_BUF_SIZE 512                         /**< UART RX buffer size. */
+#define UART_TX_BUF_SIZE 512                         /**< UART TX buffer size. */
+#define UART_RX_BUF_SIZE 512                         /**< UART RX buffer size. */
 
 
 //pwm instance
@@ -78,6 +77,41 @@ static volatile bool pwm_ready;            // A flag indicating PWM status.
 // static int ble_angle = 0x149;
 
 
+//-------------UART CONFIG------------------------------------------
+NRF_SERIAL_DRV_UART_CONFIG_DEF(lidar_uart_config,
+                      NRF_GPIO_PIN_MAP(0,11), //RX
+                      NRF_GPIO_PIN_MAP(0,13), //TX
+                      0, 0,
+                      NRF_UART_HWFC_DISABLED, NRF_UART_PARITY_EXCLUDED,
+                      NRF_UART_BAUDRATE_115200,
+                      UART_DEFAULT_CONFIG_IRQ_PRIORITY);
+
+
+
+NRF_SERIAL_QUEUES_DEF(Lserial_queues, UART_TX_BUF_SIZE, UART_RX_BUF_SIZE);
+
+
+#define SERIAL_BUFF_TX_SIZE 1
+#define SERIAL_BUFF_RX_SIZE 1
+
+NRF_SERIAL_BUFFERS_DEF(Lserial_buffs, SERIAL_BUFF_TX_SIZE, SERIAL_BUFF_RX_SIZE);
+
+NRF_SERIAL_CONFIG_DEF(Lserial_config, NRF_SERIAL_MODE_DMA,
+                      &Lserial_queues, &Lserial_buffs, uart_error_handle, NULL);
+
+
+NRF_SERIAL_UART_DEF(lidar_uart, 0);
+
+const nrf_serial_t * lidar_serial = &lidar_uart;
+
+int LidarUartInit() {
+  return nrf_serial_init(&lidar_uart, &lidar_uart_config, &Lserial_config);
+}
+
+int LidarUartUninit() {
+  return nrf_serial_uninit(&lidar_uart);
+}
+//-------------------------------------------------------------------
 
 void pwm_ready_callback(uint32_t pwm_id)    // PWM callback function
 {
@@ -87,8 +121,10 @@ void pwm_ready_callback(uint32_t pwm_id)    // PWM callback function
 
 void uart_error_handle(app_uart_evt_t * p_event)
 {
-    if (p_event->evt_type == APP_UART_COMMUNICATION_ERROR)
-    {
+    if (p_event->evt_type == APP_UART_COMMUNICATION_ERROR) {
+    //    if (p_event->data.error_communication == NRF_ERROR_NO_MEM){
+    //      return;
+    // } else
         APP_ERROR_HANDLER(p_event->data.error_communication);
       // printf("%d\n",p_event->data.error_communication );
     }
@@ -107,36 +143,34 @@ void start_lidar(){
 void stop_lidar(){
   app_pwm_disable(&PWM1);
 }
-const app_uart_comm_params_t comm_params =
-  {
-      NRF_GPIO_PIN_MAP(0,11),
-      BUCKLER_UART_TX,
-      0,
-      0,
-      UART_HWFC,
-      false,
-      NRF_UART_BAUDRATE_115200
-
-            };
+// const app_uart_comm_params_t comm_params =
+//   {
+//       NRF_GPIO_PIN_MAP(0,11),
+//       NRF_GPIO_PIN_MAP(0,13),
+//       0,
+//       0,
+//       UART_HWFC,
+//       false,
+//       NRF_UART_BAUDRATE_115200
+//             };
 
 // I2C manager
 NRF_TWI_MNGR_DEF(twi_mngr_instance, 5, 0);
 
-uint32_t uartInit(){
-  uint32_t err_code;
-  APP_UART_FIFO_INIT(&comm_params,
-                     UART_RX_BUF_SIZE,
-                     UART_TX_BUF_SIZE,
-                     uart_error_handle,
-                     APP_IRQ_PRIORITY_LOWEST,
-                     // APP_IRQ_PRIORITY_HIGHEST,
-                     err_code);
-  app_uart_flush();
-  return err_code;
-}
-uint32_t uartClose(){
-  return app_uart_close();
-}
+// uint32_t uartInit(){
+//   uint32_t err_code;
+//   APP_UART_FIFO_INIT(&comm_params,
+//                      UART_RX_BUF_SIZE,
+//                      UART_TX_BUF_SIZE,
+//                      uart_error_handle,
+//                      APP_IRQ_PRIORITY_LOWEST,
+//                      err_code);
+//   // app_uart_flush();
+//   return err_code;
+// }
+// uint32_t uartClose(){
+//   return app_uart_close();
+// }
 
 
 typedef enum {
@@ -201,13 +235,13 @@ int main(void) {
   kobukiInit();
   APP_TIMER_DEF(my_timer_id);
   err_code = app_timer_create(&my_timer_id, APP_TIMER_MODE_REPEATED, timer_handler);
-  uint32_t timeout_ticks = APP_TIMER_TICKS(1000);  //On time = 1000ms
+  uint32_t timeout_ticks = APP_TIMER_TICKS(5000);  //On time = 1000ms
   err_code = app_timer_start(my_timer_id, timeout_ticks, NULL);
 
   printf("Kobuki initialized!\n");
 
   // -------------initialize Lidar---------------
-   lidar_speed(50);
+   lidar_speed(20);
    start_lidar();
    printf("started Lidar\n");
 
@@ -218,7 +252,9 @@ int main(void) {
   // simple_ble_adv_only_name();
 
   printf("\r\nUART example started.\r\n");
-  while (true)
+  // LidarUartInit();
+  // nrf_serial_flush(lidar_serial, NRF_SERIAL_MAX_TIMEOUT);
+    while (true)
   {   
     // while (app_uart_get(cr + i) != NRF_SUCCESS);
     // // printf("%X",cr[i] );
@@ -234,17 +270,19 @@ int main(void) {
       // ble_distance++;
       // ble_angle++;
    
-    if (uartInit() == NRF_SUCCESS) {
-     if (haveData(2000) == RESULT_OK){
+      LidarUartInit();
+      nrf_serial_flush(lidar_serial, NRF_SERIAL_MAX_TIMEOUT);
+      nrf_serial_rx_drain(lidar_serial);
+      if (haveData(1000) == RESULT_OK){
        scanPoint point = getCurrentScanPoint();
        int angle = (int) point.angle % 360;
-        printf("angle: %d distance %.2f quality: %d\n",angle, point.distance/10, point.quality );
+        printf("angle: %d  distance: %.2f cm \n",angle, point.distance/10);
         // ble_distance = point.distance;
         // ble_angle = angle;
-        app_uart_flush();
      }
-      uartClose();
-    }
+      LidarUartUninit();
+     
+    // }
 
       // Sleep while SoftDevice handles BLE
       // power_manage();

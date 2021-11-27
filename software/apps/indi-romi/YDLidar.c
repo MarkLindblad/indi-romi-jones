@@ -7,12 +7,7 @@
 #include "app_error.h"
 
 result_t waitResponseHeader(lidar_ans_header *header, uint32_t timeout);
-// YDLidar::YDLidar()
-//   : _bined_serialdev(NULL) {
-//   point.distance = 0;
-//   point.angle = 0;
-//   point.quality = 0;
-// }
+
 #define OVERFLOW ((uint32_t)(0xFFFFFFFF/32.768))
 
 uint32_t millis(void)
@@ -28,10 +23,12 @@ uint32_t compareMillis(uint32_t previousMillis, uint32_t currentMillis)
 
 
 
-scanPoint point = {0,0,0, NULL};
+scanPoint point = {0,0,0,NULL};
+
 
 // start the scanPoint operation
 result_t startScan(bool force, uint32_t timeout) {
+
 	result_t ans;
 
 	lidar_ans_header response_header;
@@ -51,8 +48,8 @@ result_t startScan(bool force, uint32_t timeout) {
 	  return RESULT_OK;
 }
 
-// wait scan data
-result_t waitScanDot(uint32_t timeout) {
+// parses one package
+result_t haveData(uint32_t timeout) {
   int recvPos = 0;
   uint32_t startTs = millis();
   uint32_t waitTime;
@@ -81,12 +78,11 @@ result_t waitScanDot(uint32_t timeout) {
 
     recvPos = 0;
 
-    while ((waitTime = millis() - startTs) <= timeout) {
+    while (compareMillis(startTs, millis()) <= timeout) {
       int currentByte;
-            printf("here\n");
 
       while (app_uart_get(&currentByte) != NRF_SUCCESS);
-
+      printf("%d",millis());
       if (currentByte < 0) {
         continue;
       }
@@ -197,7 +193,7 @@ result_t waitScanDot(uint32_t timeout) {
       recvPos = 0;
       int package_sample_sum = package_Sample_Num << 1;
 
-      while ((waitTime = millis() - startTs) <= timeout) {
+      while (compareMillis(startTs, millis()) <= timeout) {
        int currentByte;
        while (app_uart_get(&currentByte) != NRF_SUCCESS);
 

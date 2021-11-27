@@ -1,5 +1,4 @@
-_build/YDLidar.o: YDLidar.c YDLidar.h \
- ../../ydlidar_arduino/inc/v8stdint.h \
+_build/YDLidar.o: YDLidar.c YDLidar.h v8stdint.h \
  /usr/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h \
  /usr/arm-none-eabi/include/stdio.h /usr/arm-none-eabi/include/_ansi.h \
  /usr/arm-none-eabi/include/newlib.h \

@@ -151,8 +151,7 @@ _build/main.o: main.c /usr/arm-none-eabi/include/math.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_uart.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/mutex/nrf_mtx.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/atomic/nrf_atomic.h \
- YDLidar.h ../../ydlidar_arduino/inc/v8stdint.h \
- ../../nrf52x-base//lib/simple_ble/simple_ble.h \
+ YDLidar.h v8stdint.h ../../nrf52x-base//lib/simple_ble/simple_ble.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_types.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/ble/common/ble_advdata.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble.h \

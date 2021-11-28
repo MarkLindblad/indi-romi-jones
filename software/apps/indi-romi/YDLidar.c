@@ -84,7 +84,7 @@ result_t haveData(uint32_t timeout) {
     while (compareMillis(startTs, millis()) <= timeout) {
       int currentByte = 0;
 
-      while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 100)!= NRF_SUCCESS);
+      while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 20)!= NRF_SUCCESS);
 
       if (currentByte < 0) {
         continue;
@@ -199,7 +199,7 @@ result_t haveData(uint32_t timeout) {
 
       while (compareMillis(startTs, millis()) <= timeout) {
        int currentByte;
-       while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 100) != NRF_SUCCESS);
+       while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 20) != NRF_SUCCESS);
 
         if (currentByte < 0) {
           continue;
@@ -305,7 +305,7 @@ result_t waitResponseHeader(lidar_ans_header *header, uint32_t timeout) {
 
   while ((waitTime = millis() - startTs) <= timeout) {
     int currentByte;
-    while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 100) != NRF_SUCCESS);
+    while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 20) != NRF_SUCCESS);
 
     if (currentByte < 0) {
       continue;

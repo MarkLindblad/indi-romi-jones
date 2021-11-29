@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #The line above tells Linux that this file is a Python script,
 #and that the OS should use the Python interpreter in /usr/bin/env
 #to run it. Don't forget to use "chmod +x [filename]" to make
@@ -14,6 +14,17 @@ import sys
 import numpy as np
 from sensor_msgs.msg import LaserScan
 import geometry_msgs
+import asyncio
+from bleak import BleakClient
+
+from ble_utils import parse_ble_args, handle_sigint, LAB11
+args = parse_ble_args('Print advertisement data from a BLE device')
+addr = args.addr.lower()
+timeout = args.timeout
+handle_sigint()
+
+
+ROMI1_ADDRESS = hex(0x1234)
 
 # This is for publishing tf frames.
 # t = geometry_msgs.msg.TransformStamped()
@@ -36,14 +47,31 @@ import geometry_msgs
 # topic_image = self.bridge.cv2_to_imgmsg(cv_grayImage)
 # self.image_pub.publish(topic_image)
 
+async def main(address):
+    print(f"searching for device {address} ({timeout}s timeout)")
+    async with BleakClient(address,timeout=timeout) as client:
+        print(f"Connected: {client.is_connected}")        
+        for service in client.services:
+            print(f"[Service] {service}")
+            for char in service.characteristics:
+                if "read" in char.properties:
+                    try:
+                        value = bytes(await client.read_gatt_char(char.uuid))
+                        print(f"\t[Characteristic] {char} ({','.join(char.properties)}), Value: {value}")
+                    except Exception as e:
+                        print(f"\t[Characteristic] {char} ({','.join(char.properties)}), Value: {e}")
+                else:
+                    value = None
+                    print(f"\t[Characteristic] {char} ({','.join(char.properties)}), Value: {value}")
 
-def main():
-    rospy.init_node("romi1")
-    
-    try:
-        rospy.spin()
-    except KeyboardInterrupt:
-        print("Shutting down")
+                for descriptor in char.descriptors:
+                    try:
+                        value = bytes(await client.read_gatt_descriptor(descriptor.handle))
+                        print(f"\t\t[Descriptor] {descriptor}) | Value: {value}")
+                    except Exception as e:
+                        print(f"\t\t[Descriptor] {descriptor}) | Value: {e}")
 
-if __name__ == '__main__':
-    main()
+
+if __name__ == "__main__":
+    while True:
+        asyncio.run(main(ROMI1_ADDRESS))

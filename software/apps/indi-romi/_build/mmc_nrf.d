@@ -22,7 +22,7 @@ _build/mmc_nrf.o: ../../nrf52x-base//lib/simple_logger/chanfs/mmc_nrf.c \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/nrfx.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/integration/nrfx/nrfx_config.h \
  ../../nrf52x-base//make/config/nrf52832/config/sdk_config.h \
- /home/student/search-and-rescue/software/boards/buckler_revC/./app_config.h \
+ /home/student/indi-romi-jones/software/boards/buckler_revC/./app_config.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/nrfx_common.h \
  /usr/lib/gcc/arm-none-eabi/7.3.1/include/stddef.h \
  /usr/lib/gcc/arm-none-eabi/7.3.1/include/stdbool.h \
@@ -81,7 +81,7 @@ _build/mmc_nrf.o: ../../nrf52x-base//lib/simple_logger/chanfs/mmc_nrf.c \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/nrfx_errors.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/delay/nrf_delay.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/boards/boards.h \
- /home/student/search-and-rescue/software/boards/buckler_revC/./buckler.h \
+ /home/student/indi-romi-jones/software/boards/buckler_revC/./buckler.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_saadc.h \
  ../../nrf52x-base//lib/simple_logger/chanfs/diskio.h \
  ../../nrf52x-base//lib/simple_logger/chanfs/integer.h

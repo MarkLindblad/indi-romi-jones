@@ -1,5 +1,5 @@
 _build/better_error_handling.o: \
- /home/student/search-and-rescue/software/boards/buckler_revC/../../libraries/better_error/better_error_handling.c \
+ /home/student/indi-romi-jones/software/boards/buckler_revC/../../libraries/better_error/better_error_handling.c \
  /usr/lib/gcc/arm-none-eabi/7.3.1/include/stdint.h \
  /usr/arm-none-eabi/include/stdint.h \
  /usr/arm-none-eabi/include/machine/_default_types.h \
@@ -54,7 +54,7 @@ _build/better_error_handling.o: \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/nrfx.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/integration/nrfx/nrfx_config.h \
  ../../nrf52x-base//make/config/nrf52832/config/sdk_config.h \
- /home/student/search-and-rescue/software/boards/buckler_revC/./app_config.h \
+ /home/student/indi-romi-jones/software/boards/buckler_revC/./app_config.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/drivers/nrfx_common.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/mdk/nrf_peripherals.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/mdk/nrf52832_peripherals.h \
@@ -111,5 +111,5 @@ _build/better_error_handling.o: \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_sdm.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_error_sdm.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/nrf_soc.h \
- /home/student/search-and-rescue/software/boards/buckler_revC/./buckler.h \
+ /home/student/indi-romi-jones/software/boards/buckler_revC/./buckler.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/hal/nrf_saadc.h

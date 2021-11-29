@@ -5,7 +5,7 @@
  * Copyright (c) 2018, EAI
  * All rights reserved.
  */
-#include "../../ydlidar_arduino/inc/v8stdint.h"
+#include "v8stdint.h"
 #include <stdint.h>
 #include <stdbool.h>
 
@@ -109,7 +109,7 @@ typedef struct scanPoint {
   result_t startScan(bool force , uint32_t timeout);
 
   // wait for one sample package to arrive
-  result_t waitScanDot(uint32_t timeout);
+  result_t haveData(uint32_t timeout);
 
   // retrieve currently received sample point
   scanPoint getCurrentScanPoint(void);

@@ -49,7 +49,7 @@ _build/ble_advdata.o: \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/softdevice/s132/headers/ble_gatts.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/sdk_common.h \
  ../../nrf52x-base//make/config/nrf52832/config/sdk_config.h \
- /home/student/search-and-rescue/software/boards/buckler_revC/./app_config.h \
+ /home/student/indi-romi-jones/software/boards/buckler_revC/./app_config.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/nordic_common.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/modules/nrfx/mdk/compiler_abstraction.h \
  ../../nrf52x-base//sdk/nrf5_sdk_15.3.0/components/libraries/util/sdk_os.h \

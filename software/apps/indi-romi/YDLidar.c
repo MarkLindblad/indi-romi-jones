@@ -5,14 +5,12 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "app_error.h"
+#include <nrf_serial.h>
 
+
+extern const nrf_serial_t * lidar_serial;
 result_t waitResponseHeader(lidar_ans_header *header, uint32_t timeout);
-// YDLidar::YDLidar()
-//   : _bined_serialdev(NULL) {
-//   point.distance = 0;
-//   point.angle = 0;
-//   point.quality = 0;
-// }
+
 #define OVERFLOW ((uint32_t)(0xFFFFFFFF/32.768))
 
 uint32_t millis(void)
@@ -28,10 +26,12 @@ uint32_t compareMillis(uint32_t previousMillis, uint32_t currentMillis)
 
 
 
-scanPoint point = {0,0,0, NULL};
+scanPoint point = {0,0,0,NULL};
+
 
 // start the scanPoint operation
 result_t startScan(bool force, uint32_t timeout) {
+
 	result_t ans;
 
 	lidar_ans_header response_header;
@@ -51,8 +51,8 @@ result_t startScan(bool force, uint32_t timeout) {
 	  return RESULT_OK;
 }
 
-// wait scan data
-result_t waitScanDot(uint32_t timeout) {
+// parses one package
+result_t haveData(uint32_t timeout) {
   int recvPos = 0;
   uint32_t startTs = millis();
   uint32_t waitTime;
@@ -81,18 +81,19 @@ result_t waitScanDot(uint32_t timeout) {
 
     recvPos = 0;
 
-    while ((waitTime = millis() - startTs) <= timeout) {
-      int currentByte;
-            printf("here\n");
+    while (compareMillis(startTs, millis()) <= timeout) {
+      int currentByte = 0;
 
-      while (app_uart_get(&currentByte) != NRF_SUCCESS);
+      while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 20)!= NRF_SUCCESS);
 
       if (currentByte < 0) {
         continue;
       }
+      // printf("%x", currentByte);
 
       switch (recvPos) {
-      case 0: // first byte == AA
+        
+      case 0: // first byte == A
         if (currentByte != (PH & 0xFF)) {
           continue;
         }
@@ -101,7 +102,6 @@ result_t waitScanDot(uint32_t timeout) {
 
       case 1: // second byte == 55
         CheckSumCal = PH;
-
         if (currentByte != (PH >> 8)) {
           recvPos = 0;
           continue;
@@ -197,9 +197,9 @@ result_t waitScanDot(uint32_t timeout) {
       recvPos = 0;
       int package_sample_sum = package_Sample_Num << 1;
 
-      while ((waitTime = millis() - startTs) <= timeout) {
+      while (compareMillis(startTs, millis()) <= timeout) {
        int currentByte;
-       while (app_uart_get(&currentByte) != NRF_SUCCESS);
+       while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 20) != NRF_SUCCESS);
 
         if (currentByte < 0) {
           continue;
@@ -304,23 +304,23 @@ result_t waitResponseHeader(lidar_ans_header *header, uint32_t timeout) {
   uint32_t waitTime;
 
   while ((waitTime = millis() - startTs) <= timeout) {
-    int currentbyte;
-    while (app_uart_get(&currentbyte) != NRF_SUCCESS);
+    int currentByte;
+    while (nrf_serial_read(lidar_serial, &currentByte, 1, NULL, 20) != NRF_SUCCESS);
 
-    if (currentbyte < 0) {
+    if (currentByte < 0) {
       continue;
     }
 
     switch (recvPos) {
     case 0:
-      if (currentbyte != LIDAR_ANS_SYNC_BYTE1) {
+      if (currentByte != LIDAR_ANS_SYNC_BYTE1) {
         continue;
       }
 
       break;
 
     case 1:
-      if (currentbyte != LIDAR_ANS_SYNC_BYTE2) {
+      if (currentByte != LIDAR_ANS_SYNC_BYTE2) {
         recvPos = 0;
         continue;
       }
@@ -328,7 +328,7 @@ result_t waitResponseHeader(lidar_ans_header *header, uint32_t timeout) {
       break;
     }
 
-    headerBuffer[recvPos++] = currentbyte;
+    headerBuffer[recvPos++] = currentByte;
 
     if (recvPos == sizeof(lidar_ans_header)) {
       return RESULT_OK;
@@ -342,3 +342,26 @@ scanPoint getCurrentScanPoint(){
 	return point;
 }
 
+
+
+
+
+/*
+0816d10816110815110814510813910812d10812110811910810d1081051081f91071c11071801071b21061cd1061
+aa1551001281d71851171951df16b1c91061bd1061c91
+061cd1061d91061e91061051071e510612e10815a10c1aa1071a91071a51071a51071a11071a11071a11071a11071a11071a51071a51071a91071a51071a91071ad1071ad1
+071b11071b51071b91071bd1071d110719e10419c1041ae1011b51011a21041b11041b91041c11041c51041
+aa1551001281751951b71a41e914d1d91041c61011c41011c810
+11c81011d01011f61041f41041e0104100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100100
+1001001001001001001001001001001001001921061b01061c81061dc10610010011e1071401071aa15510011211d1a51c31ab1d21451601071811071a91071d010710010010
+010010010010610d13510d17510d1b910d1a910d14910e19110e1e110e13510f18d10f1e910f1aa1551011011291ac1291ac1921441391101aa15510012818f1ac1d910718e1
+e219a10d1c810d1a211111511219d1121291131c511317611413a11511211610a11710611812211915611a1a211b11211d19611e12a1201da1211b21231ce12516a12817212
+b12212f1de13618a13b1c113b1c513b1b913b1ad13b18513b17913b16513b15513b15113b13d13b14913b14d13b16913b1d913b1aa15510012813f10817711714e16315610413
+d10413110412d10412910412510412510412510412510412910412d1041311041391041411041491041551041611041691041791041851041991041ad1041c11041d91041f1104
+10510512110513910515510513210512510511d1051b610416a10415d10415110414d10414d1041491041511041aa1551001281dd11711d12717614d1551041611041651041711
+0417510417910417510417510416910416110415910415910415510415910415910415910415d10416110416110415d10415d10415910415110414d10414510413d10413d1041391
+0413510413910413910414110414110414910415510416110416d10417d1041811041891041aa1551001281831271cf13612015a19110419510419d10419d1041a51041ad1041b
+51041c11041c51041d11041d51041e11041f510411e10514210515510516110516910516910516d10517d1051b61051cd1051dd1051f11051fd1051ed1051e51051e910511a1061
+001001001001001001001001001001f61331051341251341411341d51331aa15510012812b13718114610613e1721321761341991341b91341e91341091351ad13515610214d102
+14510214110214110213d10213d10213d10213910213510213510213510213110212d10212910212910212510212110212110211d10211910211910211510211110210d102111102
+*/

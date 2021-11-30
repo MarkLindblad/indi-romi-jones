@@ -8,12 +8,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <nrf_serial.h>
+// #include <nrf_serial.h>
 
 #include "kobukiUART.h"
 #include "kobukiUtilities.h"
 
-extern const nrf_serial_t * serial_ref;
+extern const int * serial_ref;
 
 int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
 
@@ -37,19 +37,20 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
 
   kobukiUARTInit();
 
-  status = nrf_serial_flush(serial_ref, NRF_SERIAL_MAX_TIMEOUT);
-  if(status != NRF_SUCCESS) {
-    printf("flush error: %d\n", status);
-    return status;
-  }
-  status = nrf_serial_rx_drain(serial_ref);
-  if(status != NRF_SUCCESS) {
-    printf("rx drain error: %d\n", status);
-    return status;
-  }
+  // status = nrf_serial_flush(serial_ref, NRF_SERIAL_MAX_TIMEOUT);
+  // if(status != NRF_SUCCESS) {
+  //   printf("flush error: %d\n", status);
+  //   return status;
+  // }
+  // status = nrf_serial_rx_drain(serial_ref);
+  // if(status != NRF_SUCCESS) {
+  //   printf("rx drain error: %d\n", status);
+  //   return status;
+  // }
+  serialFlush(*serial_ref);
   int num_checksum_failures = 0;
 
-  if (len <= 4) return NRF_ERROR_NO_MEM;
+  if (len <= 4) return -1;
 
   while(1){
     switch(state){

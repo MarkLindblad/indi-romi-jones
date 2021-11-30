@@ -2,65 +2,80 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "nrf_drv_clock.h"
-#include "nrf_uarte.h"
-#include "nrf_serial.h"
-#include "app_timer.h"
+// #include "nrf_drv_clock.h"
+// #include "nrf_uarte.h"
+// #include "nrf_serial.h"
+// #include "app_timer.h"
 
-#include "buckler.h"
+// #include "buckler.h"
+
+#include <wiringPi.h>
+#include <wiringSerial.h>
 
 #include "kobukiSensorTypes.h"
 
-NRF_SERIAL_DRV_UART_CONFIG_DEF(m_uart0_drv_config,
-                      BUCKLER_UART_RX, BUCKLER_UART_TX,
-                      0, 0,
-                      NRF_UART_HWFC_DISABLED, NRF_UART_PARITY_EXCLUDED,
-                      NRF_UART_BAUDRATE_115200,
-                      UART_DEFAULT_CONFIG_IRQ_PRIORITY);
+// NRF_SERIAL_DRV_UART_CONFIG_DEF(m_uart0_drv_config,
+//                       BUCKLER_UART_RX, BUCKLER_UART_TX,
+//                       0, 0,
+//                       NRF_UART_HWFC_DISABLED, NRF_UART_PARITY_EXCLUDED,
+//                       NRF_UART_BAUDRATE_115200,
+//                       UART_DEFAULT_CONFIG_IRQ_PRIORITY);
 
-#define SERIAL_FIFO_TX_SIZE 512
-#define SERIAL_FIFO_RX_SIZE 512
+// #define SERIAL_FIFO_TX_SIZE 512
+// #define SERIAL_FIFO_RX_SIZE 512
 
-NRF_SERIAL_QUEUES_DEF(serial_queues, SERIAL_FIFO_TX_SIZE, SERIAL_FIFO_RX_SIZE);
-
-
-#define SERIAL_BUFF_TX_SIZE 1
-#define SERIAL_BUFF_RX_SIZE 1
-
-NRF_SERIAL_BUFFERS_DEF(serial_buffs, SERIAL_BUFF_TX_SIZE, SERIAL_BUFF_RX_SIZE);
-
-NRF_SERIAL_CONFIG_DEF(serial_config, NRF_SERIAL_MODE_DMA,
-                      &serial_queues, &serial_buffs, NULL, NULL);
+// NRF_SERIAL_QUEUES_DEF(serial_queues, SERIAL_FIFO_TX_SIZE, SERIAL_FIFO_RX_SIZE);
 
 
-NRF_SERIAL_UART_DEF(serial_uart, 0);
+// #define SERIAL_BUFF_TX_SIZE 1
+// #define SERIAL_BUFF_RX_SIZE 1
 
-const nrf_serial_t * serial_ref = &serial_uart;
+// NRF_SERIAL_BUFFERS_DEF(serial_buffs, SERIAL_BUFF_TX_SIZE, SERIAL_BUFF_RX_SIZE);
+
+// NRF_SERIAL_CONFIG_DEF(serial_config, NRF_SERIAL_MODE_DMA,
+//                       &serial_queues, &serial_buffs, NULL, NULL);
+
+
+// NRF_SERIAL_UART_DEF(serial_uart, 0);
+
+// const nrf_serial_t * serial_ref = &serial_uart;
+
+  int serial_port;
+  const int *serial_ref = &serial_port;
+  
 
 int kobukiUARTInit() {
-  return nrf_serial_init(&serial_uart, &m_uart0_drv_config, &serial_config);
+  if ((serial_port = serialOpen ("/dev/ttyS0", 115200)) < 0)	/* open serial port */
+  {
+    fprintf (stderr, "Unable to open serial device: %s\n", strerror (errno)) ;
+    return 1 ;
+  }
 }
 
 int kobukiUARTUnInit() {
-  return nrf_serial_uninit(&serial_uart);
+  if ((serial_port = serialClose ("/dev/ttyS0", 115200)) < 0)	/* open serial port */
+  {
+    fprintf (stderr, "Unable to open serial device: %s\n", strerror (errno)) ;
+    return 1 ;
+  }
 }
 
-int kobukiInit() {
-  uint32_t err_code;
+// int kobukiInit() {
+//   uint32_t err_code;
 
-  err_code = nrf_drv_clock_init();
-  if (err_code != NRF_ERROR_MODULE_ALREADY_INITIALIZED){
-    APP_ERROR_CHECK(err_code);
-  }
+//   err_code = nrf_drv_clock_init();
+//   if (err_code != NRF_ERROR_MODULE_ALREADY_INITIALIZED){
+//     APP_ERROR_CHECK(err_code);
+//   }
 
-  nrf_drv_clock_lfclk_request(NULL);
-  err_code = app_timer_init();
-  if (err_code != NRF_ERROR_MODULE_ALREADY_INITIALIZED){
-    APP_ERROR_CHECK(err_code);
-  }
+//   nrf_drv_clock_lfclk_request(NULL);
+//   err_code = app_timer_init();
+//   if (err_code != NRF_ERROR_MODULE_ALREADY_INITIALIZED){
+//     APP_ERROR_CHECK(err_code);
+//   }
 
-  return err_code;
-}
+//   return err_code;
+// }
 
 uint8_t checkSumRead(uint8_t * buffer, int length){
 	int i;

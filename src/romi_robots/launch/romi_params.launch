@@ -1,0 +1,9 @@
+<launch>
+
+  <!-- parameters for romi.py  -->
+  <node name="romi1" pkg="romi_robots" type="romi.py" output="screen" args="romi1 laser odom"/>
+  <!-- UNCOMMENT THIS WHEN USING MORE THAN ROMI ROBOT -->
+  <!-- <node name="romi2" pkg="romi_robots" type="romi.py" output="screen" args="romi2"/>
+  <node name="romi3" pkg="romi_robots" type="romi.py" output="screen" args="romi3"/> -->
+
+</launch>

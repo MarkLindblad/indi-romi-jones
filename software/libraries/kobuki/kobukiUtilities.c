@@ -44,6 +44,11 @@
   const int *serial_ref = &serial_port;
   
 
+  if (wiringPiSetup () == -1)					/* initializes wiringPi setup */
+  {
+    fprintf (stdout, "Unable to start wiringPi: %s\n", strerror (errno)) ;
+    return 1 ;
+  }
 int kobukiUARTInit() {
   if ((serial_port = serialOpen ("/dev/ttyS0", 115200)) < 0)	/* open serial port */
   {
@@ -51,6 +56,27 @@ int kobukiUARTInit() {
     return 1 ;
   }
 }
+// int read_str(int serial, void * dst, int size){
+//   int i = 0;
+//   while i < size{
+//     if (serialDataAvail(serial)){
+//       dst[i] = serialGetchar(serial)
+//       if (dst[i] < 0){
+//         return -1
+//       }
+//       i++;
+//     }
+//   }
+// }
+
+// void send_str(int serial, void * src, int size){
+//   int i = 0;
+//   while i < size {
+//      serialPutchar (serial, src[i]);
+//       i++;
+//     }
+// }
+
 
 int kobukiUARTUnInit() {
   if ((serial_port = serialClose ("/dev/ttyS0", 115200)) < 0)	/* open serial port */

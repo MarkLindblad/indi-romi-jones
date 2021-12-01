@@ -7,16 +7,19 @@
 #include "kobukiActuator.h"
 #include "kobukiUtilities.h"
 
-#include "app_error.h"
-#include "nrf_serial.h"
-#include "nrf_delay.h"
+// #include "app_error.h"
+// #include "nrf_serial.h"
+// #include "nrf_delay.h"
+
+#include <wiringPi.h>
+#include <wiringSerial.h>
 
 #include <stdlib.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 
-extern const nrf_serial_t * serial_ref;
+extern const int * serial_ref;
 
 static int32_t kobukiSendPayload(uint8_t* payload, uint8_t len) {
     uint8_t writeData[256] = {0};
@@ -28,7 +31,8 @@ static int32_t kobukiSendPayload(uint8_t* payload, uint8_t len) {
     memcpy(writeData + 3, payload, len);
 	writeData[3+len] = checkSum(writeData, 3 + len);
    
-    int status = nrf_serial_write(serial_ref, writeData, len + 4, NULL, 10);
+    int status = write(serial_ref, writeData, len + 4, NULL, 10);
+
     if(status != NRF_SUCCESS) {
         return status;
     }

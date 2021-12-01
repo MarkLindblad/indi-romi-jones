@@ -9,6 +9,7 @@
 int kobukiInit();
 int kobukiUARTInit();
 int kobukiUARTUnInit();
+// int read_str(int serial, void * dst, int size);
 uint8_t checkSumRead(uint8_t * buffer, int length);
 uint8_t checkSum(uint8_t * buffer, int length);
 

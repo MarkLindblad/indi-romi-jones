@@ -20,6 +20,12 @@
 #pragma comment(lib, "ydlidar_sdk.lib")
 #endif
 
+//--------Kobuki--------------------
+#include "kobukiActuator.h"
+#include "kobukiSensorTypes.h"
+#include "kobukiSensorPoll.h"
+#include "kobukiUtilities.h"
+
 int main(int argc, const char *argv[]) {
     
     //--------------socket------------------------
@@ -27,10 +33,10 @@ int main(int argc, const char *argv[]) {
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
-
+   // perror("started");
     // Creating socket file descriptor
     if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
-    {
+    {   
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
@@ -45,11 +51,11 @@ int main(int argc, const char *argv[]) {
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons( PORT );
-       
+       printf("here");
     // Forcefully attaching socket to the port 8080
     if (bind(server_fd, (struct sockaddr *)&address, 
                                  sizeof(address))<0)
-    {
+    {   
         perror("bind failed");
         exit(EXIT_FAILURE);
     }
@@ -65,7 +71,7 @@ int main(int argc, const char *argv[]) {
         exit(EXIT_FAILURE);
     }
     
-    //--------------------------------------------------
+    //------------LIDAR init--------------------
 
 
     os_init();
@@ -134,7 +140,12 @@ int main(int argc, const char *argv[]) {
     LaserFan scan;
     LaserFanInit(&scan);
 
-    
+    //------------------UART---------------------------
+      if (wiringPiSetup () == -1)					/* initializes wiringPi setup */
+    {
+        fprintf (stdout, "Unable to start wiringPi: %s\n", strerror (errno)) ;
+        return 1 ;
+    }
     float point[2] = {0};
     while (ret && os_isOk()) {
         if(doProcessSimple(laser, &scan)) {

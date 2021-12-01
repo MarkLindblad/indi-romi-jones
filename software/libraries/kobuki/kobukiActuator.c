@@ -11,8 +11,10 @@
 // #include "nrf_serial.h"
 // #include "nrf_delay.h"
 
-#include <wiringPi.h>
-#include <wiringSerial.h>
+#include <fcntl.h> // Contains file controls like O_RDWR
+#include <errno.h> // Error integer and strerror() function
+#include <termios.h> // Contains POSIX terminal control definitions
+#include <unistd.h> // write(), read(), close()
 
 #include <stdlib.h>
 #include <math.h>
@@ -31,12 +33,12 @@ static int32_t kobukiSendPayload(uint8_t* payload, uint8_t len) {
     memcpy(writeData + 3, payload, len);
 	writeData[3+len] = checkSum(writeData, 3 + len);
    
-    int status = write(serial_ref, writeData, len + 4, NULL, 10);
+    int status = write(*serial_ref, writeData, len + 4);
 
-    if(status != NRF_SUCCESS) {
+    if(status <0) {
         return status;
     }
-    return NRF_SUCCESS;
+    return -1;
     
 
 }

@@ -47,7 +47,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
   //   printf("rx drain error: %d\n", status);
   //   return status;
   // }
-  serialFlush(*serial_ref);
+  serialFlush(*serial_ref); ///--------------------------------
   int num_checksum_failures = 0;
 
   if (len <= 4) return -1;
@@ -56,36 +56,35 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
     switch(state){
       case wait_until_AA:
         // status = nrf_serial_read(serial_ref, header_buf, 1, NULL, 100);
-        if (serialDataAvail (*serial_ref)){
-            header_buf[0] = serialGetchar(*serial_ref)
+        status = read(*serial_ref, header_buf, 1);
             
-          if(header_buf[0] < 0) {
-            printf("UART error reading start of kobuki header: %d\n", header_buf[0]);
-            if (aa_count++ < 20) {
-              printf("\ttrying again...\n");
-              break;
-            } else {
-              printf("Failed to recieve from robot.\n\tIs robot powered on?\n\tTry unplugging buckler from USB and power cycle robot\n");
-            }
-            aa_count = 0;
-            return header_buf[0];
+        if(status < 0) {
+          printf("UART error reading start of kobuki header: %d\n", header_buf[0]);
+          if (aa_count++ < 20) {
+            printf("\ttrying again...\n");
+            break;
+          } else {
+            printf("Failed to recieve from robot.\n\tIs robot powered on?\n\tTry unplugging buckler from USB and power cycle robot\n");
           }
-        } 
-          if (serialDataAvail (*serial_ref)){
-              header_buf[1] = serialGetchar(*serial_ref);
-              status = header_buf[1];
-              if(status < 0) {
-              printf("UART error reading last of kobuki header: %d\n", status);
-              if (aa_count++ < 20) {
-                printf("\ttrying again...\n");
-                break;
-              } else {
-                printf("Failed to recieve from robot.\n\tIs robot powered on?\n\tTry unplugging buckler from USB and power cycle robot\n");
-              }
-              aa_count = 0;
-              return status;
-              }
-          }
+          aa_count = 0;
+          return header_buf[0];
+        }
+    
+
+        status = read(*serial_ref, header_buf + 1, 1);
+        if(status < 0) {
+        printf("UART error reading last of kobuki header: %d\n", status);
+        if (aa_count++ < 20) {
+          printf("\ttrying again...\n");
+          break;
+        } else {
+          printf("Failed to recieve from robot.\n\tIs robot powered on?\n\tTry unplugging buckler from USB and power cycle robot\n");
+        }
+        aa_count = 0;
+        return status;
+        }
+          
+        }
         // if(status != NRF_SUCCESS) {
         //   printf("UART error reading start of kobuki header: %d\n", status);
         // }

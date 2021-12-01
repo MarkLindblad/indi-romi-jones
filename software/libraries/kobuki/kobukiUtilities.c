@@ -45,36 +45,7 @@
   int serial_port;
   const int *serial_ref = &serial_port;
   
-  struct termios UART;
-  if (tcgetattr(serial_port, &tty) != 0) {
-    printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
-}
-
-  UART.c_cflag &= ~PARENB; //disable parity
-  UART.c_cflag &= ~CSTOPB; //one stop bit
-  UART.c_cflag |= CS8; //8 bits
-  UART.c_cflag &= ~CRTSCTS; //disable flow controll
-  UART.c_cflag |= CREAD | CLOCAL;
-  UART.c_lflag &= ~ICANON; //disable cannonical
-
-  UART.c_lflag &= ~ECHO; // Disable echo
-  UART.c_lflag &= ~ECHOE; // Disable erasure
-  UART.c_lflag &= ~ECHONL; // Disable new-line echo
-
-  UART.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
-  UART.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
-  UART.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
-  UART.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
-  UART.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
-  UART.c_cc[VTIME] = 10;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
-  UART.c_cc[VMIN] = 0; 
-  cfsetispeed(&UART,B115200);
-  cfsetospeed(&UART,B115200);
-
-  // Save tty settings, also checking for error
-  if (tcsetattr(serial_port, TCSANOW, &UART) != 0) {
-      printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
-  }
+ 
 
 int kobukiUARTInit() {
   int serial_port = open("/dev/ttyS0", O_RDWR);
@@ -131,36 +102,36 @@ uint8_t checkSum(uint8_t * buffer, int length){
     return cs;
 }
 
-// checks for the state change of a button press on any of the Kobuki buttons
-bool is_button_pressed(KobukiSensors_t* sensors) {
-  // save previous states of buttons
-  static bool previous_B0 = false;
-  static bool previous_B1 = false;
-  static bool previous_B2 = false;
+// // checks for the state change of a button press on any of the Kobuki buttons
+// bool is_button_pressed(KobukiSensors_t* sensors) {
+//   // save previous states of buttons
+//   static bool previous_B0 = false;
+//   static bool previous_B1 = false;
+//   static bool previous_B2 = false;
 
-  bool result = false;
+//   bool result = false;
 
-  // check B0
-  bool current_B0 = sensors->buttons.B0;
-  if (current_B0 && previous_B0 != current_B0) {
-    result = true;
-  }
-  previous_B0 = current_B0;
+//   // check B0
+//   bool current_B0 = sensors->buttons.B0;
+//   if (current_B0 && previous_B0 != current_B0) {
+//     result = true;
+//   }
+//   previous_B0 = current_B0;
 
-  // check B1
-  bool current_B1 = sensors->buttons.B1;
-  if (current_B1 && previous_B1 != current_B1) {
-    result = true;
-  }
-  previous_B1 = current_B1;
+//   // check B1
+//   bool current_B1 = sensors->buttons.B1;
+//   if (current_B1 && previous_B1 != current_B1) {
+//     result = true;
+//   }
+//   previous_B1 = current_B1;
 
-  // check B2
-  bool current_B2 = sensors->buttons.B2;
-  if (current_B2 && previous_B2 != current_B2) {
-    result = true;
-  }
-  previous_B2 = current_B2;
+//   // check B2
+//   bool current_B2 = sensors->buttons.B2;
+//   if (current_B2 && previous_B2 != current_B2) {
+//     result = true;
+//   }
+//   previous_B2 = current_B2;
 
-  return result;
-}
+//   return result;
+// }
 

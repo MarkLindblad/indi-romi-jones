@@ -1,0 +1,2 @@
+/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles/rebuild_cache.dir
+/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles/edit_cache.dir

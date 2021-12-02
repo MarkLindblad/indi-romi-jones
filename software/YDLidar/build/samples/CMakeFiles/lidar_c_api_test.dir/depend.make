@@ -5,11 +5,11 @@ samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../core/base/typed
 samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../core/base/utils.h
 samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../core/common/ydlidar_def.h
 samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../src/ydlidar_sdk.h
+samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/kobuki/kobukiActuator.h
+samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/kobuki/kobukiSensor.h
+samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/kobuki/kobukiSensorPoll.h
+samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/kobuki/kobukiSensorTypes.h
+samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/kobuki/kobukiUART.h
+samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/kobuki/kobukiUtilities.h
 samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: ../samples/lidar_c_api_test.c
-samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.h
-samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.h
-samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.h
-samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorTypes.h
-samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.h
-samples/CMakeFiles/lidar_c_api_test.dir/lidar_c_api_test.c.o: /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.h
 

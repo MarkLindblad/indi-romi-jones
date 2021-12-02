@@ -54,37 +54,6 @@ int kobukiUARTInit() {
   if (serial_port < 0) {
       printf("Error %i from open: %s\n", errno, strerror(errno));
   }
-  struct termios UART;
-        if (tcgetattr(*serial_ref, &UART) != 0) {
-            printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
-        }
-
-        UART.c_cflag &= ~PARENB; //disable parity
-        UART.c_cflag &= ~CSTOPB; //one stop bit
-        UART.c_cflag |= CS8; //8 bits
-        UART.c_cflag &= ~CRTSCTS; //disable flow controll
-        UART.c_cflag |= CREAD | CLOCAL;
-        UART.c_lflag &= ~ICANON; //disable cannonical
-
-        UART.c_lflag &= ~ECHO; // Disable echo
-        UART.c_lflag &= ~ECHOE; // Disable erasure
-        UART.c_lflag &= ~ECHONL; // Disable new-line echo
-
-        UART.c_lflag &= ~ISIG; // Disable interpretation of INTR, QUIT and SUSP
-        UART.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
-        UART.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
-        UART.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
-        UART.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
-        UART.c_cc[VTIME] = 10;    // Wait for up to 1s (10 deciseconds), returning as soon as any data is received.
-        UART.c_cc[VMIN] = 0; 
-        cfsetispeed(&UART,B115200);
-        cfsetospeed(&UART,B115200);
-
-        // Save tty settings, also checking for error
-        if (tcsetattr(*serial_ref, TCSANOW, &UART) != 0) {
-            printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
-        }
-        printf("UART initialized?");
 }
 
 

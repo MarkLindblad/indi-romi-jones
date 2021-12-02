@@ -21,10 +21,10 @@
 #endif
 
 //--------Kobuki--------------------
-#include "./kobuki/kobukiActuator.h"
-#include "./kobuki/kobukiSensorTypes.h"
-#include "./kobuki/kobukiSensorPoll.h"
-#include "./kobuki/kobukiUtilities.h"
+#include "kobukiActuator.h"
+#include "kobukiSensorTypes.h"
+#include "kobukiSensorPoll.h"
+#include "kobukiUtilities.h"
 
 #include <fcntl.h>
 #include <errno.h>

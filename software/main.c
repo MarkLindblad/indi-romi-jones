@@ -153,14 +153,14 @@ int main(int argc, const char *argv[])
     printf("started\n");
     // int16_t speed = 100;
     // kobukiUARTInit();
-    kobukiDriveDirect(0, 0);
+    kobukiDriveDirect(200, 200);
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     while(1){
     
     kobukiSensorPoll(&sensors);
     printf("wheel ticks: %d\n", sensors.leftWheelEncoder);
-    delay(1);
+    // delay(1);
     }
     // kobukiUARTUnInit();
     //     while (ret && os_isOk()) {

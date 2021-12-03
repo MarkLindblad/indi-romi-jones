@@ -13,6 +13,7 @@
 #include <errno.h> // Error integer and strerror() function
 #include <termios.h> // Contains POSIX terminal control definitions
 #include <unistd.h> // write(), read(), close()
+#include <sys/ioctl.h>
 
 #include "kobukiSensorTypes.h"
 
@@ -49,7 +50,7 @@
 int kobukiUARTInit() {
   // serial_port = open("/dev/serial0", O_RDWR);
   serial_port = open("/dev/ttyAMA0", O_RDWR);
-  printf("(in port %d)", serial_port);
+  // printf("(in port %d)", serial_port);
   // Check for errors
   if (serial_port < 0) {
       printf("Error %i from open: %s\n", errno, strerror(errno));
@@ -85,11 +86,31 @@ int kobukiUARTInit() {
         if (tcsetattr(serial_port, TCSANOW, &UART) != 0) {
             printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
         }
-        printf("UART initialized?");
-
+        UARTFlush();
 }
 
+void UARTFlush(){
+  tcflush(serial_port, TCIFLUSH);
+        int bytes_available;
+        int retval = ioctl(serial_port, FIONREAD, &bytes_available);
+        if (retval < 0) {
+          perror("FIONREAD ioctl failed\n");
+          exit(7);
+              printf("UART initialized?");
+        }
+}
 
+int UARTRead(uint8_t * buffer, uint8_t len){
+
+  int byte =0;
+  for (int i = 0; i < len; i++){
+    byte = read(serial_port, buffer + i, 1);
+    if (byte != 1){
+      i++;
+    }
+  }
+  return len;
+}
 
 int kobukiUARTUnInit() {
   close(serial_port);

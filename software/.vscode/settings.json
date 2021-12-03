@@ -2,6 +2,7 @@
     "files.associations": {
         "ydlidar_sdk.h": "c",
         "kobukiactuator.h": "c",
-        "kobukiuart.h": "c"
+        "kobukiuart.h": "c",
+        "kobukisensortypes.h": "c"
     }
 }

@@ -43,7 +43,7 @@
 // const nrf_serial_t * serial_ref = &serial_uart;
 
   int serial_port;
-  extern const int *serial_ref = &serial_port;
+  const int *serial_ref = &serial_port;
   
  
 

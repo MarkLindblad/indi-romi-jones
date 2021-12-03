@@ -7,11 +7,11 @@
 
 #include <stdlib.h>
 
-#include "app_error.h"
+// #include "app_error.h"
 
 #include "kobukiSensor.h"
 #include "kobukiSensorPoll.h"
-
+#define NRF_SUCCESS 1
 
 // Request sensor data and wait for response
 int32_t kobukiSensorPoll(KobukiSensors_t* const	sensors){

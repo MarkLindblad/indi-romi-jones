@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 
-const int * serial_ref;
+extern const int * serial_ref;
 
 static int32_t kobukiSendPayload(uint8_t* payload, uint8_t len) {
     uint8_t writeData[256] = {0};

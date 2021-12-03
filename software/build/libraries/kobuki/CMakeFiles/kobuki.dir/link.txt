@@ -1,2 +1,2 @@
-/bin/ar qc libkobuki.a CMakeFiles/kobuki.dir/kobuki.c.o
+/bin/ar qc libkobuki.a CMakeFiles/kobuki.dir/kobukiActuator.c.o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o CMakeFiles/kobuki.dir/kobukiUtilities.c.o
 /bin/ranlib libkobuki.a

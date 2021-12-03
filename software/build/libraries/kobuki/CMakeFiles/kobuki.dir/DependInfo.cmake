@@ -4,7 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobuki.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki/CMakeFiles/kobuki.dir/kobuki.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

@@ -10,11 +10,16 @@
 
 // #include <nrf_serial.h>
 
+#include <fcntl.h>
+#include <errno.h>
+#include <termios.h>
+#include <unistd.h>
+
 #include "kobukiUART.h"
 #include "kobukiUtilities.h"
 
 extern const int * serial_ref;
-
+#define NRF_SUCCESS 1
 int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
 
   typedef enum {
@@ -47,7 +52,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
   //   printf("rx drain error: %d\n", status);
   //   return status;
   // }
-  serialFlush(*serial_ref); ///--------------------------------
+  // serialFlush(*serial_ref); ///--------------------------------
   int num_checksum_failures = 0;
 
   if (len <= 4) return -1;
@@ -84,7 +89,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
         return status;
         }
           
-        }
+        
         // if(status != NRF_SUCCESS) {
         //   printf("UART error reading start of kobuki header: %d\n", status);
         // }

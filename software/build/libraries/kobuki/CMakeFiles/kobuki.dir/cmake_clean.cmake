@@ -1,5 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/kobuki.dir/kobuki.c.o"
+  "CMakeFiles/kobuki.dir/kobukiActuator.c.o"
+  "CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o"
+  "CMakeFiles/kobuki.dir/kobukiUtilities.c.o"
   "libkobuki.a"
   "libkobuki.pdb"
 )

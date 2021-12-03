@@ -3,5 +3,11 @@
 
 CMakeFiles/romi.dir/main.c.o
  ../libraries/kobuki/kobuki.h
+ ../libraries/kobuki/kobukiActuator.h
+ ../libraries/kobuki/kobukiSensor.h
+ ../libraries/kobuki/kobukiSensorPoll.h
+ ../libraries/kobuki/kobukiSensorTypes.h
+ ../libraries/kobuki/kobukiUART.h
+ ../libraries/kobuki/kobukiUtilities.h
  /home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar/src/ydlidar_sdk.h
  /home/pi/Desktop/EECS149/indi-romi-jones/software/main.c

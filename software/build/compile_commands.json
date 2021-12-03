@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build",
+  "command": "/bin/gcc-10  -I/usr/local/include/src -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/romi.dir/main.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/main.c",
+  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/main.c"
+},
+{
+  "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki",
+  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobuki.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobuki.c",
+  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobuki.c"
+}
+]

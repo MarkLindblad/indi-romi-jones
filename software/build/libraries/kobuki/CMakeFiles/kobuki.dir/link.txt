@@ -1,0 +1,2 @@
+/bin/ar qc libkobuki.a CMakeFiles/kobuki.dir/kobuki.c.o
+/bin/ranlib libkobuki.a

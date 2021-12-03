@@ -34,7 +34,6 @@
 // #include <unistd.h>
 
 
-
 int main(int argc, const char *argv[])
 {
     
@@ -151,7 +150,7 @@ int main(int argc, const char *argv[])
 
     //     //------------------UART---------------------------
     printf("started\n");
-    kobukiDriveDirect(50, 50);
+    kobukiDriveDirect(30, 30);
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     while(1){

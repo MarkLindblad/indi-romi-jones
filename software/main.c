@@ -151,16 +151,13 @@ int main(int argc, const char *argv[])
 
     //     //------------------UART---------------------------
     printf("started\n");
-    // int16_t speed = 100;
-    // kobukiUARTInit();
-    kobukiDriveDirect(200, 200);
+    kobukiDriveDirect(50, 50);
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     while(1){
     
     kobukiSensorPoll(&sensors);
     printf("wheel ticks: %d\n", sensors.leftWheelEncoder);
-    // delay(1);
     }
     // kobukiUARTUnInit();
     //     while (ret && os_isOk()) {

@@ -1,1 +1,1 @@
-/bin/gcc-10 -g -rdynamic CMakeFiles/romi.dir/main.c.o -o romi  libraries/kobuki/libkobuki.a -lydlidar_sdk -lpthread -lrt 
+/bin/g++-10 -g -rdynamic CMakeFiles/romi.dir/main.c.o -o romi  libraries/kobuki/libkobuki.a libydlidar_sdk.a -lpthread -lrt 

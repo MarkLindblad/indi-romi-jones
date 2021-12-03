@@ -14,11 +14,29 @@
 # EXTERNAL cache entries
 ########################
 
+//Build CSharp.
+BUILD_CSHARP:BOOL=OFF
+
+//Build Example.
+BUILD_EXAMPLES:BOOL=ON
+
+//Build shared libraries.
+BUILD_SHARED_LIBS:BOOL=OFF
+
+//Build Test.
+BUILD_TEST:BOOL=ON
+
 //Build the testing tree.
 BUILD_TESTING:BOOL=ON
 
 //Path to a program.
 BZRCOMMAND:FILEPATH=BZRCOMMAND-NOTFOUND
+
+//Use ccache if available
+CCACHE:BOOL=ON
+
+//Path to a program.
+CCACHE_PROGRAM:FILEPATH=CCACHE_PROGRAM-NOTFOUND
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/bin/addr2line
@@ -300,7 +318,28 @@ CVS_UPDATE_OPTIONS:STRING=-d -A -P
 DART_TESTING_TIMEOUT:STRING=1500
 
 //Path to a program.
+DPKG_PROGRAM:FILEPATH=/usr/bin/dpkg
+
+//Should the ydlidar_sdk package be exported for use by other software
+EXPORT_ydlidar_sdk:BOOL=OFF
+
+//Path to a program.
 GITCOMMAND:FILEPATH=/usr/bin/git
+
+//Path to a file.
+GTEST_INCLUDE_DIR:PATH=GTEST_INCLUDE_DIR-NOTFOUND
+
+//Path to a library.
+GTEST_LIBRARY:FILEPATH=GTEST_LIBRARY-NOTFOUND
+
+//Path to a library.
+GTEST_LIBRARY_DEBUG:FILEPATH=GTEST_LIBRARY_DEBUG-NOTFOUND
+
+//Path to a library.
+GTEST_MAIN_LIBRARY:FILEPATH=GTEST_MAIN_LIBRARY-NOTFOUND
+
+//Path to a library.
+GTEST_MAIN_LIBRARY_DEBUG:FILEPATH=GTEST_MAIN_LIBRARY_DEBUG-NOTFOUND
 
 //Path to a program.
 HGCOMMAND:FILEPATH=HGCOMMAND-NOTFOUND
@@ -317,6 +356,24 @@ MEMORYCHECK_SUPPRESSIONS_FILE:FILEPATH=
 //Path to a program.
 P4COMMAND:FILEPATH=P4COMMAND-NOTFOUND
 
+//Path to a program.
+PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python
+
+//Path to a file.
+PYTHON_INCLUDE_DIR:PATH=/usr/include/python3.9
+
+//Path to a library.
+PYTHON_LIBRARY:FILEPATH=/usr/lib/arm-linux-gnueabihf/libpython3.9.so
+
+//Path to a library.
+PYTHON_LIBRARY_DEBUG:FILEPATH=PYTHON_LIBRARY_DEBUG-NOTFOUND
+
+//SDK required incs
+SDK_INCS:STRING=
+
+//SDK required libraries
+SDK_LIBS:STRING=pthread;rt
+
 //Name of the computer/site where compile is being run
 SITE:STRING=raspberrypi
 
@@ -328,6 +385,9 @@ SLURM_SRUN_COMMAND:FILEPATH=SLURM_SRUN_COMMAND-NOTFOUND
 
 //Path to a program.
 SVNCOMMAND:FILEPATH=SVNCOMMAND-NOTFOUND
+
+//Path to a program.
+SWIG_EXECUTABLE:FILEPATH=SWIG_EXECUTABLE-NOTFOUND
 
 //Value Computed by CMake
 kobuki_BINARY_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki
@@ -341,8 +401,23 @@ romi_BINARY_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/build
 //Value Computed by CMake
 romi_SOURCE_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software
 
+//Value Computed by CMake
+ydlidar_sdk_BINARY_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/YDLidar
+
 //The directory containing a CMake configuration file for ydlidar_sdk.
 ydlidar_sdk_DIR:PATH=/usr/local/lib/cmake/ydlidar_sdk
+
+//Dependencies for the target
+ydlidar_sdk_LIB_DEPENDS:STATIC=general;pthread;general;rt;
+
+//Value Computed by CMake
+ydlidar_sdk_SOURCE_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar
+
+//Value Computed by CMake
+ydlidar_test_BINARY_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/YDLidar/samples
+
+//Value Computed by CMake
+ydlidar_test_SOURCE_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar/samples
 
 
 ########################
@@ -451,7 +526,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=2
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=13
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -540,8 +615,24 @@ CVSCOMMAND-ADVANCED:INTERNAL=1
 CVS_UPDATE_OPTIONS-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: DART_TESTING_TIMEOUT
 DART_TESTING_TIMEOUT-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: EXPORT_ydlidar_sdk
+EXPORT_ydlidar_sdk-ADVANCED:INTERNAL=1
+//Details about finding PythonInterp
+FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python][v2.7.18()]
+//Details about finding PythonLibs
+FIND_PACKAGE_MESSAGE_DETAILS_PythonLibs:INTERNAL=[/usr/lib/arm-linux-gnueabihf/libpython3.9.so][/usr/include/python3.9][v3.9.2()]
 //ADVANCED property for variable: GITCOMMAND
 GITCOMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_INCLUDE_DIR
+GTEST_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_LIBRARY
+GTEST_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_LIBRARY_DEBUG
+GTEST_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_MAIN_LIBRARY
+GTEST_MAIN_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GTEST_MAIN_LIBRARY_DEBUG
+GTEST_MAIN_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: HGCOMMAND
 HGCOMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: MAKECOMMAND
@@ -552,6 +643,14 @@ MEMORYCHECK_COMMAND-ADVANCED:INTERNAL=1
 MEMORYCHECK_SUPPRESSIONS_FILE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: P4COMMAND
 P4COMMAND-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_EXECUTABLE
+PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_INCLUDE_DIR
+PYTHON_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_LIBRARY
+PYTHON_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_LIBRARY_DEBUG
+PYTHON_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SITE
 SITE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SLURM_SBATCH_COMMAND
@@ -560,16 +659,14 @@ SLURM_SBATCH_COMMAND-ADVANCED:INTERNAL=1
 SLURM_SRUN_COMMAND-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: SVNCOMMAND
 SVNCOMMAND-ADVANCED:INTERNAL=1
-//ADVANCED property for variable: YDLIDAR_SDK_INCLUDE_DIRS
-YDLIDAR_SDK_INCLUDE_DIRS-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: SWIG_EXECUTABLE
+SWIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //YDLIDAR_SDK include directories
 YDLIDAR_SDK_INCLUDE_DIRS:INTERNAL=/usr/local/include/src;/usr/local/include
-//ADVANCED property for variable: YDLIDAR_SDK_LIBRARIES
-YDLIDAR_SDK_LIBRARIES-ADVANCED:INTERNAL=1
 //YDLIDAR_SDK libraries
 YDLIDAR_SDK_LIBRARIES:INTERNAL=ydlidar_sdk;pthread;rt
-//ADVANCED property for variable: YDLIDAR_SDK_LIBRARY_DIRS
-YDLIDAR_SDK_LIBRARY_DIRS-ADVANCED:INTERNAL=1
 //YDLIDAR_SDK library directories
 YDLIDAR_SDK_LIBRARY_DIRS:INTERNAL=
+//All cmake targets for which optimization can be suppressed
+all_posix_cmake_targets:INTERNAL=ydlidar_sdk
 

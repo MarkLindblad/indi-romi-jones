@@ -278,6 +278,9 @@ ydlidar_sdk_LIB_DEPENDS:STATIC=general;pthread;general;rt;
 //Value Computed by CMake
 ydlidar_sdk_SOURCE_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar
 
+//Dependencies for the target
+ydlidar_sdk_static_LIB_DEPENDS:STATIC=general;pthread;general;rt;
+
 //Value Computed by CMake
 ydlidar_test_BINARY_DIR:STATIC=/home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar/build/samples
 

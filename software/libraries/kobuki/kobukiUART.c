@@ -76,7 +76,6 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
             return header_buf[0];
           }
       
-
           status = read(*port, header_buf + 1, 1);
 
           if(status < 0) {

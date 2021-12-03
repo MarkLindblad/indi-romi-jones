@@ -151,7 +151,7 @@ int main(int argc, const char *argv[]) {
 
 //     //------------------UART---------------------------
         
-        kobukiDriveDirect(50,50);
+        // kobukiDriveDirect(50,50);
 
 //     while (ret && os_isOk()) {
 //         if(doProcessSimple(laser, &scan)) {

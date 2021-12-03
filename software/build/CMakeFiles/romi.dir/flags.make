@@ -4,7 +4,7 @@
 # compile C with /bin/gcc-10
 C_DEFINES = 
 
-C_INCLUDES = -I/usr/local/include/src -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki
+C_INCLUDES = -I/home/pi/Desktop/EECS149/indi-romi-jones/software -I/home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar -I/home/pi/Desktop/EECS149/indi-romi-jones/software/YDLidar/src -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build/YDLidar -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki
 
 C_FLAGS = -g
 

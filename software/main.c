@@ -21,7 +21,8 @@
 #endif
 #include <string.h>
 
-#include "./YDLidar/src/ydlidar_sdk.h"
+// #include "./YDLidar/src/ydlidar_sdk.h"
+#include "ydlidar_sdk.h"
 #if defined(_MSC_VER)
 #pragma comment(lib, "ydlidar_sdk.lib")
 #endif
@@ -80,106 +81,117 @@ int main(int argc, const char *argv[])
     //         exit(EXIT_FAILURE);
     //     }
 
-    //     //------------LIDAR init--------------------
+        //------------LIDAR init--------------------
 
-    //     os_init();
-    //     YDLidar *laser = lidarCreate();
-    //     //string prop
-    //     char port[50] = "/dev/ydlidar";
-    //     LidarPort ports;
-    //     int size = lidarPortList(&ports);
-    //     int i = 0;
-    //     for(i =0; i < size; i++) {
-    //         printf("port: %s\n", ports.port[i].data);
-    //         /// last port
-    //         strcpy(port, ports.port[i].data);
-    //     }
-    //     setlidaropt(laser, LidarPropSerialPort, port, sizeof(port));
-    //     strcpy(port, "");
-    //     setlidaropt(laser, LidarPropIgnoreArray,port, sizeof(port));
+        os_init();
+        YDLidar *laser = lidarCreate();
+        //string prop
+        char port[50] = "/dev/ydlidar";
+        LidarPort ports;
+        int size = lidarPortList(&ports);
+        int i = 0;
+        for(i =0; i < size; i++) {
+            printf("port: %s\n", ports.port[i].data);
+            /// last port
+            strcpy(port, ports.port[i].data);
+        }
+        setlidaropt(laser, LidarPropSerialPort, port, sizeof(port));
+        strcpy(port, "");
+        setlidaropt(laser, LidarPropIgnoreArray,port, sizeof(port));
 
-    //     //int prop
-    //     int i_optvalue = 115200;
-    //     setlidaropt(laser, LidarPropSerialBaudrate, &i_optvalue, sizeof(int));
-    //     // i_optvalue = TYPE_TOF;
-    //     i_optvalue = TYPE_TRIANGLE;
-    //     setlidaropt(laser, LidarPropLidarType, &i_optvalue, sizeof(int));
-    //     i_optvalue = YDLIDAR_TYPE_SERIAL;
-    //     setlidaropt(laser, LidarPropDeviceType, &i_optvalue, sizeof(int));
-    //     i_optvalue = 3;
-    //     setlidaropt(laser, LidarPropSampleRate, &i_optvalue, sizeof(int));
+        //int prop
+        int i_optvalue = 115200;
+        setlidaropt(laser, LidarPropSerialBaudrate, &i_optvalue, sizeof(int));
+        // i_optvalue = TYPE_TOF;
+        i_optvalue = TYPE_TRIANGLE;
+        setlidaropt(laser, LidarPropLidarType, &i_optvalue, sizeof(int));
+        i_optvalue = YDLIDAR_TYPE_SERIAL;
+        setlidaropt(laser, LidarPropDeviceType, &i_optvalue, sizeof(int));
+        i_optvalue = 3;
+        setlidaropt(laser, LidarPropSampleRate, &i_optvalue, sizeof(int));
 
-    //     //bool prop
-    //     bool b_optval = true;
-    //     setlidaropt(laser, LidarPropAutoReconnect, &b_optval, sizeof(bool));
-    //     b_optval = true;
-    //     setlidaropt(laser, LidarPropSingleChannel, &b_optval, sizeof(bool));
-    //     b_optval = false;
-    //     setlidaropt(laser, LidarPropIntenstiy, &b_optval, sizeof(bool));
-    //     setlidaropt(laser, LidarPropInverted, &b_optval, sizeof(bool));
-    //     setlidaropt(laser, LidarPropReversion, &b_optval, sizeof(bool));
-    //     b_optval = true;
-    //     setlidaropt(laser, LidarPropSupportMotorDtrCtrl, &b_optval, sizeof(bool));
-    //     b_optval = false;
-    //     setlidaropt(laser, LidarPropFixedResolution, &b_optval, sizeof(bool));
+        //bool prop
+        bool b_optval = true;
+        setlidaropt(laser, LidarPropAutoReconnect, &b_optval, sizeof(bool));
+        b_optval = true;
+        setlidaropt(laser, LidarPropSingleChannel, &b_optval, sizeof(bool));
+        b_optval = false;
+        setlidaropt(laser, LidarPropIntenstiy, &b_optval, sizeof(bool));
+        setlidaropt(laser, LidarPropInverted, &b_optval, sizeof(bool));
+        setlidaropt(laser, LidarPropReversion, &b_optval, sizeof(bool));
+        b_optval = true;
+        setlidaropt(laser, LidarPropSupportMotorDtrCtrl, &b_optval, sizeof(bool));
+        b_optval = false;
+        setlidaropt(laser, LidarPropFixedResolution, &b_optval, sizeof(bool));
 
-    //     //float prop
-    //     float f_optval = 4.f;
-    //     setlidaropt(laser, LidarPropScanFrequency, &f_optval, sizeof(float));
-    //     f_optval = 360.0f;
-    //     setlidaropt(laser, LidarPropMaxAngle, &f_optval, sizeof(float));
-    //     f_optval = 0.0f;
-    //     setlidaropt(laser, LidarPropMinAngle, &f_optval, sizeof(float));
-    //     // f_optval = 8.f;
-    //     f_optval = 10.f;
-    //     setlidaropt(laser, LidarPropMaxRange, &f_optval, sizeof(float));
-    //     // f_optval = 0.12f;
-    //     f_optval = 0.12f;
-    //     setlidaropt(laser, LidarPropMinRange, &f_optval, sizeof(float));
+        //float prop
+        float f_optval = 4.f;
+        setlidaropt(laser, LidarPropScanFrequency, &f_optval, sizeof(float));
+        f_optval = 360.0f;
+        setlidaropt(laser, LidarPropMaxAngle, &f_optval, sizeof(float));
+        f_optval = 0.0f;
+        setlidaropt(laser, LidarPropMinAngle, &f_optval, sizeof(float));
+        // f_optval = 8.f;
+        f_optval = 10.f;
+        setlidaropt(laser, LidarPropMaxRange, &f_optval, sizeof(float));
+        // f_optval = 0.12f;
+        f_optval = 0.12f;
+        setlidaropt(laser, LidarPropMinRange, &f_optval, sizeof(float));
 
-    //     getlidaropt(laser, LidarPropSerialBaudrate,&i_optvalue, sizeof(int));
-    //     printf("baudrate: %d\n", i_optvalue);
+        getlidaropt(laser, LidarPropSerialBaudrate,&i_optvalue, sizeof(int));
+        printf("baudrate: %d\n", i_optvalue);
 
-    //     bool ret = initialize(laser);
-    //    if(ret) {
-    //        ret = turnOn(laser);
-    //    }
+        bool ret = initialize(laser);
+       if(ret) {
+           ret = turnOn(laser);
+       }
 
-    //     LaserFan scan;
-    //     LaserFanInit(&scan);
+        LaserFan scan;
+        LaserFanInit(&scan);
 
-    //     //------------------UART---------------------------
+
+
+
     printf("started\n");
+    kobukiUARTInit();
     kobukiDriveDirect(30, 30);
+    kobukiUARTInit();
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
-    while(1){
+    sensors.rightWheelEncoder = 0;
+
+    // while(1){
     
-    kobukiSensorPoll(&sensors);
-    printf("wheel ticks: %d\n", sensors.leftWheelEncoder);
-    }
-    // kobukiUARTUnInit();
-    //     while (ret && os_isOk()) {
-    //         if(doProcessSimple(laser, &scan)) {
+    // kobukiSensorPoll(&sensors);
+    // printf("wheel ticks: %d\n", sensors.leftWheelEncoder);
+    // }
+    kobukiUARTUnInit();
+        while (ret && os_isOk()) {
+            if(doProcessSimple(laser, &scan)) {
+                kobukiSensorPoll(&sensors);
+                float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
+                point[0] = scan.stamp;
+                point[3] = sensors.leftWheelEncoder;
+                point [4] = sensors.rightWheelEncoder;
+               for (int i = 0; i < scan.npoints; i++){
+    		        // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
+                    point[1] = scan.points[i].range*100;
+                    point[2] = scan.points[i].angle * 57.29;
+                    printf("stamp: %d distance: %.2f angle: %.2f ticks (%d, %d)\n", point[0], point[1], point[2],
+                                                                                             point[3], point[4]);
+                    // sprintf (msg, "%.0f, %.0f",scan.points[i].range*100, scan.points[i].angle * 57.29 );
+                    // send(new_socket , point , 2 * sizeof(float) , 0 );
+                    fflush(stdout);
+               }
 
-    // ;
-    //            for (int i = 0; i < scan.npoints; i++){
-    // 		        fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
-    //                 point[0] = scan.points[i].range*100;
-    //                 point[1] = scan.points[i].angle * 57.29;
-    //                 // sprintf (msg, "%.0f, %.0f",scan.points[i].range*100, scan.points[i].angle * 57.29 );
-    //                 send(new_socket , point , 2 * sizeof(float) , 0 );
-    //                 fflush(stdout);
-    //            }
-
-    //         } else {
-    //             fprintf(stderr, "Failed to get Lidar Data\n");
-    //             fflush(stderr);
-    //         }
-    //     }
-    //     LaserFanDestroy(&scan);
-    //     turnOff(laser);
-    //     disconnecting(laser);
-    //     lidarDestroy(&laser);
+            } else {
+                fprintf(stderr, "Failed to get Lidar Data\n");
+                fflush(stderr);
+            }
+        }
+        LaserFanDestroy(&scan);
+        turnOff(laser);
+        disconnecting(laser);
+        lidarDestroy(&laser);
     return 0;
 }

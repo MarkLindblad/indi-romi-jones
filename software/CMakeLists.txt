@@ -15,18 +15,33 @@ target_include_directories(kobuki PUBLIC
                           "${PROJECT_SOURCE_DIR}/libraries/kobuki"
                           )
 
+# ############## YDLIDAR SDK START#####################################
+# #find ydlidar_sdk package
+# find_package(ydlidar_sdk)
+# #Include directories
+# INCLUDE_DIRECTORIES(
+#   ${YDLIDAR_SDK_INCLUDE_DIRS}
+# )
+# #link library directories
+# link_directories(${YDLIDAR_SDK_LIBRARY_DIRS})
+
+# #Link your project to ydlidar_sdk library.
+# target_link_libraries(romi PUBLIC ${YDLIDAR_SDK_LIBRARIES})
+
+# ############## YDLIDAR SDK END#####################################
 ############## YDLIDAR SDK START#####################################
-#find ydlidar_sdk package
-find_package(ydlidar_sdk)
 #Include directories
 INCLUDE_DIRECTORIES(
-  ${YDLIDAR_SDK_INCLUDE_DIRS}
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/YDLidar
+  ${CMAKE_SOURCE_DIR}/YDLidar/src
+  ${CMAKE_CURRENT_BINARY_DIR}/YDLidar
 )
-#link library directories
-link_directories(${YDLIDAR_SDK_LIBRARY_DIRS})
+#Add YDLIDAR SDK sub project
+add_subdirectory(YDLidar)
 
 #Link your project to ydlidar_sdk library.
-target_link_libraries(romi PUBLIC ${YDLIDAR_SDK_LIBRARIES})
+target_link_libraries(romi PUBLIC ydlidar_sdk)
 
 ############## YDLIDAR SDK END#####################################
 

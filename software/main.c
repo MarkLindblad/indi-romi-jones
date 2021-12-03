@@ -9,6 +9,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <math.h>
+#include <time.h>
+
 #ifdef WIN32
 #include <windows.h>
 #else
@@ -21,25 +26,18 @@
 #pragma comment(lib, "ydlidar_sdk.lib")
 #endif
 
-//--------Kobuki--------------------
-// #include "./libraries/kobuki/kobukiActuator.h"
-// #include "./libraries/kobuki/kobukiSensorTypes.h"
-// #include "./libraries/kobuki/kobukiSensorPoll.h"
-// #include "./libraries/kobuki/kobukiUtilities.h"
 #include "kobuki.h"
 
-#include <fcntl.h>
-#include <errno.h>
-#include <termios.h>
-#include <unistd.h>
+// #include <fcntl.h>
+// #include <errno.h>
+// #include <termios.h>
+// #include <unistd.h>
 
-// extern const int *serial_ref;
+
 
 int main(int argc, const char *argv[])
 {
-    printf("here");
-    fflush(stdout);
-    fprintf(stdout, "started");
+    
     //--------------socket------------------------
     //    int server_fd, new_socket, valread;
     //     struct sockaddr_in address;
@@ -152,9 +150,19 @@ int main(int argc, const char *argv[])
     //     LaserFanInit(&scan);
 
     //     //------------------UART---------------------------
-    int16_t speed = 100;
-    kobukiDriveDirect(speed, speed);
-
+    printf("started\n");
+    // int16_t speed = 100;
+    // kobukiUARTInit();
+    kobukiDriveDirect(0, 0);
+    KobukiSensors_t sensors;
+    sensors.leftWheelEncoder = 0;
+    while(1){
+    
+    kobukiSensorPoll(&sensors);
+    printf("wheel ticks: %d\n", sensors.leftWheelEncoder);
+    delay(1);
+    }
+    // kobukiUARTUnInit();
     //     while (ret && os_isOk()) {
     //         if(doProcessSimple(laser, &scan)) {
 

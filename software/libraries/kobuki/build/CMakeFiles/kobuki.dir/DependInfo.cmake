@@ -4,7 +4,11 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobuki.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/build/CMakeFiles/kobuki.dir/kobuki.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/build/CMakeFiles/kobuki.dir/kobukiActuator.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/build/CMakeFiles/kobuki.dir/kobukiSensor.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/build/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/build/CMakeFiles/kobuki.dir/kobukiUART.c.o"
+  "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c" "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/build/CMakeFiles/kobuki.dir/kobukiUtilities.c.o"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

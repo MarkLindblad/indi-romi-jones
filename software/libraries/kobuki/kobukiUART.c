@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 // #include <nrf_serial.h>
 
@@ -18,10 +19,10 @@
 #include "kobukiUART.h"
 #include "kobukiUtilities.h"
 
-extern const int * serial_ref;
+extern const int *port;
 #define NRF_SUCCESS 1
 int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
-
+  
   typedef enum {
     wait_until_AA,
     wait_until_55,
@@ -41,7 +42,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
   size_t aa_count = 0;
 
   kobukiUARTInit();
-
+  printf("(port %d)",*port);
   // status = nrf_serial_flush(serial_ref, NRF_SERIAL_MAX_TIMEOUT);
   // if(status != NRF_SUCCESS) {
   //   printf("flush error: %d\n", status);
@@ -58,10 +59,11 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
   if (len <= 4) return -1;
 
   while(1){
+    // printf("state %d\n", state);
     switch(state){
       case wait_until_AA:
         // status = nrf_serial_read(serial_ref, header_buf, 1, NULL, 100);
-        status = read(*serial_ref, header_buf, 1);
+        status = read(*port, header_buf, 1);
             
         if(status < 0) {
           printf("UART error reading start of kobuki header: %d\n", header_buf[0]);
@@ -76,7 +78,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
         }
     
 
-        status = read(*serial_ref, header_buf + 1, 1);
+        status = read(*port, header_buf + 1, 1);
         if(status < 0) {
         printf("UART error reading last of kobuki header: %d\n", status);
         if (aa_count++ < 20) {
@@ -104,7 +106,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
 
       case read_length:
         // status = nrf_serial_read(serial_ref, &payloadSize, sizeof(payloadSize), NULL, 100);
-         status = read(*serial_ref, (void*)&payloadSize, sizeof(payloadSize));
+         status = read(*port, (void*)&payloadSize, sizeof(payloadSize));
         if(status < 0) {
           return status;
         }
@@ -116,7 +118,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
 
       case read_payload:
         // status = nrf_serial_read(serial_ref, packetBuffer+3, payloadSize+1, &paylen, 100);
-        status = read(*serial_ref, (void*) packetBuffer + 3, payloadSize + 1);
+        status = read(*port, (void*) packetBuffer + 3, payloadSize + 1);
 
         if(status < 0) {
           return status;

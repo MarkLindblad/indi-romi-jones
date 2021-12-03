@@ -6,17 +6,27 @@
 },
 {
   "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki",
+  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiUtilities.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c",
+  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c"
+},
+{
+  "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki",
+  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiUART.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.c",
+  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.c"
+},
+{
+  "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki",
   "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiActuator.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c",
   "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c"
 },
 {
   "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki",
-  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c",
-  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c"
+  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiSensor.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.c",
+  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.c"
 },
 {
   "directory": "/home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki",
-  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiUtilities.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c",
-  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c"
+  "command": "/bin/gcc-10  -I/home/pi/Desktop/EECS149/indi-romi-jones/software/build -I/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki -g -o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c",
+  "file": "/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c"
 }
 ]

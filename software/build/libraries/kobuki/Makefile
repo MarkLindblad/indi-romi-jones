@@ -204,6 +204,33 @@ kobukiActuator.c.s:
 	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.s
 .PHONY : kobukiActuator.c.s
 
+kobukiSensor.o: kobukiSensor.c.o
+
+.PHONY : kobukiSensor.o
+
+# target to build an object file
+kobukiSensor.c.o:
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.o
+.PHONY : kobukiSensor.c.o
+
+kobukiSensor.i: kobukiSensor.c.i
+
+.PHONY : kobukiSensor.i
+
+# target to preprocess a source file
+kobukiSensor.c.i:
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.i
+.PHONY : kobukiSensor.c.i
+
+kobukiSensor.s: kobukiSensor.c.s
+
+.PHONY : kobukiSensor.s
+
+# target to generate assembly for a file
+kobukiSensor.c.s:
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.s
+.PHONY : kobukiSensor.c.s
+
 kobukiSensorPoll.o: kobukiSensorPoll.c.o
 
 .PHONY : kobukiSensorPoll.o
@@ -230,6 +257,33 @@ kobukiSensorPoll.s: kobukiSensorPoll.c.s
 kobukiSensorPoll.c.s:
 	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s
 .PHONY : kobukiSensorPoll.c.s
+
+kobukiUART.o: kobukiUART.c.o
+
+.PHONY : kobukiUART.o
+
+# target to build an object file
+kobukiUART.c.o:
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.o
+.PHONY : kobukiUART.c.o
+
+kobukiUART.i: kobukiUART.c.i
+
+.PHONY : kobukiUART.i
+
+# target to preprocess a source file
+kobukiUART.c.i:
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.i
+.PHONY : kobukiUART.c.i
+
+kobukiUART.s: kobukiUART.c.s
+
+.PHONY : kobukiUART.s
+
+# target to generate assembly for a file
+kobukiUART.c.s:
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build && $(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.s
+.PHONY : kobukiUART.c.s
 
 kobukiUtilities.o: kobukiUtilities.c.o
 
@@ -273,9 +327,15 @@ help:
 	@echo "... kobukiActuator.o"
 	@echo "... kobukiActuator.i"
 	@echo "... kobukiActuator.s"
+	@echo "... kobukiSensor.o"
+	@echo "... kobukiSensor.i"
+	@echo "... kobukiSensor.s"
 	@echo "... kobukiSensorPoll.o"
 	@echo "... kobukiSensorPoll.i"
 	@echo "... kobukiSensorPoll.s"
+	@echo "... kobukiUART.o"
+	@echo "... kobukiUART.i"
+	@echo "... kobukiUART.s"
 	@echo "... kobukiUtilities.o"
 	@echo "... kobukiUtilities.i"
 	@echo "... kobukiUtilities.s"

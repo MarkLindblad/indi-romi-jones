@@ -8,6 +8,8 @@
 #define _KOBUKI_UART_H
 
 #include <stddef.h>
+#include <stdint.h>
+
 
 extern  int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len);
 

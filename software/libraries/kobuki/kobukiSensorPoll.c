@@ -9,8 +9,10 @@
 
 // #include "app_error.h"
 
+#include "kobukiUART.h"
 #include "kobukiSensor.h"
 #include "kobukiSensorPoll.h"
+
 #define NRF_SUCCESS 1
 
 // Request sensor data and wait for response

@@ -16,6 +16,8 @@
 
 #include "kobukiSensorTypes.h"
 
+#include "kobukiActuator.h"
+
 // NRF_SERIAL_DRV_UART_CONFIG_DEF(m_uart0_drv_config,
 //                       BUCKLER_UART_RX, BUCKLER_UART_TX,
 //                       0, 0,
@@ -43,19 +45,18 @@
 // const nrf_serial_t * serial_ref = &serial_uart;
 
   int serial_port;
-  const int *serial_ref = &serial_port;
-  
- 
-
+  const int *port = &serial_port;
 int kobukiUARTInit() {
-  int serial_port = open("/dev/ttyS0", O_RDWR);
-
+  // serial_port = open("/dev/serial0", O_RDWR);
+  serial_port = open("/dev/ttyAMA0", O_RDWR);
+  printf("(in port %d)", serial_port);
   // Check for errors
   if (serial_port < 0) {
       printf("Error %i from open: %s\n", errno, strerror(errno));
   }
+
   struct termios UART;
-        if (tcgetattr(*serial_ref, &UART) != 0) {
+        if (tcgetattr(serial_port, &UART) != 0) {
             printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
         }
 
@@ -81,10 +82,11 @@ int kobukiUARTInit() {
         cfsetospeed(&UART,B115200);
 
         // Save tty settings, also checking for error
-        if (tcsetattr(*serial_ref, TCSANOW, &UART) != 0) {
+        if (tcsetattr(serial_port, TCSANOW, &UART) != 0) {
             printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
         }
         printf("UART initialized?");
+
 }
 
 

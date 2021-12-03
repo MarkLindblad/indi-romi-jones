@@ -897,12 +897,12 @@ CMakeFiles/ContinuousMemCheck.dir/clean:
 CMakeFiles/romi.dir/all: libraries/kobuki/CMakeFiles/kobuki.dir/all
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/romi.dir/build.make CMakeFiles/romi.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/romi.dir/build.make CMakeFiles/romi.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=5,6 "Built target romi"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=7,8 "Built target romi"
 .PHONY : CMakeFiles/romi.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/romi.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles 8
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/romi.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles 0
 .PHONY : CMakeFiles/romi.dir/rule
@@ -924,12 +924,12 @@ CMakeFiles/romi.dir/clean:
 libraries/kobuki/CMakeFiles/kobuki.dir/all:
 	$(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/depend
 	$(MAKE) $(MAKESILENT) -f libraries/kobuki/CMakeFiles/kobuki.dir/build.make libraries/kobuki/CMakeFiles/kobuki.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=1,2,3,4 "Built target kobuki"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target kobuki"
 .PHONY : libraries/kobuki/CMakeFiles/kobuki.dir/all
 
 # Build rule for subdir invocation for target.
 libraries/kobuki/CMakeFiles/kobuki.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 libraries/kobuki/CMakeFiles/kobuki.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles 0
 .PHONY : libraries/kobuki/CMakeFiles/kobuki.dir/rule

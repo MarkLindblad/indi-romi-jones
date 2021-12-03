@@ -76,35 +76,9 @@ include libraries/kobuki/CMakeFiles/kobuki.dir/progress.make
 # Include the compile flags for this target's objects.
 include libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
 
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o: ../libraries/kobuki/kobukiActuator.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o"
-	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiActuator.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c
-
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/kobuki.dir/kobukiActuator.c.i"
-	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c > CMakeFiles/kobuki.dir/kobukiActuator.c.i
-
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiActuator.c.s"
-	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c -o CMakeFiles/kobuki.dir/kobukiActuator.c.s
-
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o: ../libraries/kobuki/kobukiSensorPoll.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o"
-	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c
-
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i"
-	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c > CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i
-
-libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s"
-	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c -o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s
-
 libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
 libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.o: ../libraries/kobuki/kobukiUtilities.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.o"
 	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiUtilities.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c
 
 libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.i: cmake_force
@@ -115,21 +89,77 @@ libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiUtilities.c.s"
 	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c -o CMakeFiles/kobuki.dir/kobukiUtilities.c.s
 
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.o: ../libraries/kobuki/kobukiUART.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.o"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiUART.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.c
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/kobuki.dir/kobukiUART.c.i"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.c > CMakeFiles/kobuki.dir/kobukiUART.c.i
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiUART.c.s"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.c -o CMakeFiles/kobuki.dir/kobukiUART.c.s
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o: ../libraries/kobuki/kobukiActuator.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiActuator.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/kobuki.dir/kobukiActuator.c.i"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c > CMakeFiles/kobuki.dir/kobukiActuator.c.i
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiActuator.c.s"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.c -o CMakeFiles/kobuki.dir/kobukiActuator.c.s
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.o: ../libraries/kobuki/kobukiSensor.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.o"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiSensor.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.c
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/kobuki.dir/kobukiSensor.c.i"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.c > CMakeFiles/kobuki.dir/kobukiSensor.c.i
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiSensor.c.s"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensor.c -o CMakeFiles/kobuki.dir/kobukiSensor.c.s
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o: libraries/kobuki/CMakeFiles/kobuki.dir/flags.make
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o: ../libraries/kobuki/kobukiSensorPoll.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o -c /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c > CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i
+
+libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s"
+	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && /bin/gcc-10 $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorPoll.c -o CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s
+
 # Object files for target kobuki
 kobuki_OBJECTS = \
+"CMakeFiles/kobuki.dir/kobukiUtilities.c.o" \
+"CMakeFiles/kobuki.dir/kobukiUART.c.o" \
 "CMakeFiles/kobuki.dir/kobukiActuator.c.o" \
-"CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o" \
-"CMakeFiles/kobuki.dir/kobukiUtilities.c.o"
+"CMakeFiles/kobuki.dir/kobukiSensor.c.o" \
+"CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o"
 
 # External object files for target kobuki
 kobuki_EXTERNAL_OBJECTS =
 
-libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o
-libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o
 libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUtilities.c.o
+libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiUART.c.o
+libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiActuator.c.o
+libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensor.c.o
+libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o
 libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/build.make
 libraries/kobuki/libkobuki.a: libraries/kobuki/CMakeFiles/kobuki.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C static library libkobuki.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pi/Desktop/EECS149/indi-romi-jones/software/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking C static library libkobuki.a"
 	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && $(CMAKE_COMMAND) -P CMakeFiles/kobuki.dir/cmake_clean_target.cmake
 	cd /home/pi/Desktop/EECS149/indi-romi-jones/software/build/libraries/kobuki && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/kobuki.dir/link.txt --verbose=$(VERBOSE)
 

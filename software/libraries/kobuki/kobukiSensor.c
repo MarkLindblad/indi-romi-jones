@@ -55,7 +55,7 @@ void kobukiParseSensorPacket(const uint8_t * packet, KobukiSensors_t * sensors) 
 
 					sensors->leftWheelPWM		=	(int8_t) packet[i+11];
 					sensors->rightWheelPWM 		=	(int8_t) packet[i+12];
-					sensors->buttons.B0		=	(bool)(packet[i+13] & 0x01);
+					sensors->buttons.B3		=	(bool)(packet[i+13] & 0x01);
 					sensors->buttons.B1		=	(bool)(packet[i+13] & 0x02);
 					sensors->buttons.B2		=	(bool)(packet[i+13] & 0x04);
 

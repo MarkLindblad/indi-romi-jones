@@ -539,32 +539,140 @@ kobuki/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/build
 .PHONY : kobuki/fast
 
-kobuki.o: kobuki.c.o
+kobukiActuator.o: kobukiActuator.c.o
 
-.PHONY : kobuki.o
+.PHONY : kobukiActuator.o
 
 # target to build an object file
-kobuki.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobuki.c.o
-.PHONY : kobuki.c.o
+kobukiActuator.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiActuator.c.o
+.PHONY : kobukiActuator.c.o
 
-kobuki.i: kobuki.c.i
+kobukiActuator.i: kobukiActuator.c.i
 
-.PHONY : kobuki.i
+.PHONY : kobukiActuator.i
 
 # target to preprocess a source file
-kobuki.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobuki.c.i
-.PHONY : kobuki.c.i
+kobukiActuator.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiActuator.c.i
+.PHONY : kobukiActuator.c.i
 
-kobuki.s: kobuki.c.s
+kobukiActuator.s: kobukiActuator.c.s
 
-.PHONY : kobuki.s
+.PHONY : kobukiActuator.s
 
 # target to generate assembly for a file
-kobuki.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobuki.c.s
-.PHONY : kobuki.c.s
+kobukiActuator.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiActuator.c.s
+.PHONY : kobukiActuator.c.s
+
+kobukiSensor.o: kobukiSensor.c.o
+
+.PHONY : kobukiSensor.o
+
+# target to build an object file
+kobukiSensor.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiSensor.c.o
+.PHONY : kobukiSensor.c.o
+
+kobukiSensor.i: kobukiSensor.c.i
+
+.PHONY : kobukiSensor.i
+
+# target to preprocess a source file
+kobukiSensor.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiSensor.c.i
+.PHONY : kobukiSensor.c.i
+
+kobukiSensor.s: kobukiSensor.c.s
+
+.PHONY : kobukiSensor.s
+
+# target to generate assembly for a file
+kobukiSensor.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiSensor.c.s
+.PHONY : kobukiSensor.c.s
+
+kobukiSensorPoll.o: kobukiSensorPoll.c.o
+
+.PHONY : kobukiSensorPoll.o
+
+# target to build an object file
+kobukiSensorPoll.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiSensorPoll.c.o
+.PHONY : kobukiSensorPoll.c.o
+
+kobukiSensorPoll.i: kobukiSensorPoll.c.i
+
+.PHONY : kobukiSensorPoll.i
+
+# target to preprocess a source file
+kobukiSensorPoll.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiSensorPoll.c.i
+.PHONY : kobukiSensorPoll.c.i
+
+kobukiSensorPoll.s: kobukiSensorPoll.c.s
+
+.PHONY : kobukiSensorPoll.s
+
+# target to generate assembly for a file
+kobukiSensorPoll.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiSensorPoll.c.s
+.PHONY : kobukiSensorPoll.c.s
+
+kobukiUART.o: kobukiUART.c.o
+
+.PHONY : kobukiUART.o
+
+# target to build an object file
+kobukiUART.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiUART.c.o
+.PHONY : kobukiUART.c.o
+
+kobukiUART.i: kobukiUART.c.i
+
+.PHONY : kobukiUART.i
+
+# target to preprocess a source file
+kobukiUART.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiUART.c.i
+.PHONY : kobukiUART.c.i
+
+kobukiUART.s: kobukiUART.c.s
+
+.PHONY : kobukiUART.s
+
+# target to generate assembly for a file
+kobukiUART.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiUART.c.s
+.PHONY : kobukiUART.c.s
+
+kobukiUtilities.o: kobukiUtilities.c.o
+
+.PHONY : kobukiUtilities.o
+
+# target to build an object file
+kobukiUtilities.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiUtilities.c.o
+.PHONY : kobukiUtilities.c.o
+
+kobukiUtilities.i: kobukiUtilities.c.i
+
+.PHONY : kobukiUtilities.i
+
+# target to preprocess a source file
+kobukiUtilities.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiUtilities.c.i
+.PHONY : kobukiUtilities.c.i
+
+kobukiUtilities.s: kobukiUtilities.c.s
+
+.PHONY : kobukiUtilities.s
+
+# target to generate assembly for a file
+kobukiUtilities.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/kobuki.dir/build.make CMakeFiles/kobuki.dir/kobukiUtilities.c.s
+.PHONY : kobukiUtilities.c.s
 
 # Help Target
 help:
@@ -606,9 +714,21 @@ help:
 	@echo "... NightlyTest"
 	@echo "... NightlyUpdate"
 	@echo "... kobuki"
-	@echo "... kobuki.o"
-	@echo "... kobuki.i"
-	@echo "... kobuki.s"
+	@echo "... kobukiActuator.o"
+	@echo "... kobukiActuator.i"
+	@echo "... kobukiActuator.s"
+	@echo "... kobukiSensor.o"
+	@echo "... kobukiSensor.i"
+	@echo "... kobukiSensor.s"
+	@echo "... kobukiSensorPoll.o"
+	@echo "... kobukiSensorPoll.i"
+	@echo "... kobukiSensorPoll.s"
+	@echo "... kobukiUART.o"
+	@echo "... kobukiUART.i"
+	@echo "... kobukiUART.s"
+	@echo "... kobukiUtilities.o"
+	@echo "... kobukiUtilities.i"
+	@echo "... kobukiUtilities.s"
 .PHONY : help
 
 

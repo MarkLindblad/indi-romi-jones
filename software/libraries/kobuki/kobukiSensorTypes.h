@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+
 typedef struct{
     // Indicates if wheel is in contact with ground
 	bool	wheeldropLeft;
@@ -16,7 +17,7 @@ typedef struct{
 } KobukiBumps_WheelDrops_t;
 
 typedef struct{
-	bool	B0;
+	bool	B3;
 	bool	B1;
 	bool    B2;
 } KobukiButtons_t;

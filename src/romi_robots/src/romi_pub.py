@@ -65,7 +65,6 @@ class Romi():
         for r in range_data:
             scan.ranges.append(r)
         self.laser_pub.publish(scan)
-            
 
     def broadcast_and_publish_odom(self, left_tick_data, right_tick_data):
         current_time = rospy.Time.now()

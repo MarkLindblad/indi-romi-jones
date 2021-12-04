@@ -215,9 +215,6 @@ class OccupancyGrid2d(object):
             # Only update each voxel once. 
             # The occupancy grid is stored in self._map
 
-            #x_vals = np.arange(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), self._x_res/10)
-            #y_vals = np.arange(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), self._y_res/10)
-
 
             y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 150)
             x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 150)
@@ -226,7 +223,6 @@ class OccupancyGrid2d(object):
             for i in range(len(x_vals)):
                 prev_voxel = curr_voxel
                 curr_voxel = self.PointToVoxel(x_vals[i], y_vals[i])
-                print(x_vals[i], y_vals[i])
                 if (curr_voxel == prev_voxel):
                     continue
                 if (curr_voxel == self.PointToVoxel(sensor_x + r*np.cos(angle_fixed_frame), sensor_y + r*np.sin(angle_fixed_frame))):

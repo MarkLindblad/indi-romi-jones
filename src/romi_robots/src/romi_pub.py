@@ -66,11 +66,16 @@ class Romi():
             scan.ranges.append(r)
         self.laser_pub.publish(scan)
             
-
+    def get_forward_tick_delta(new_tick, old_tick):
+        if new_tick >= old_tick:
+            return new_tick - old_tick
+        else:
+            return (2 << 16 - old_tick) + new_tick
+        
     def broadcast_and_publish_odom(self, left_tick_data, right_tick_data):
         current_time = rospy.Time.now()
-        delta_left = left_tick_data - self.old_left_ticks
-        delta_right = right_tick_data - self.old_right_ticks
+        delta_left = get_forward_tick_delta(left_tick_data, self.old_left_ticks)
+        delta_right = get_forward_tick_delta(right_tick_data, self.old_right_ticks)
         dl = 2 * np.pi * delta_left / TPR
         dr = 2 * np.pi * delta_right / TPR
         dc = (dl + dr) / 2

@@ -165,8 +165,7 @@ class OccupancyGrid2d(object):
 
         # Get our current pose from TF.
         try:
-            pose = self._tf_buffer.lookup_transform(
-                self._fixed_frame, self._sensor_frame, rospy.Time())
+            pose = self._tf_buffer.lookup_transform(self._fixed_frame, self._sensor_frame, rospy.Time())
         except (tf2_ros.LookupException,
                 tf2_ros.ConnectivityException,
                 tf2_ros.ExtrapolationException):
@@ -178,6 +177,7 @@ class OccupancyGrid2d(object):
         # assuming that the turtlebot is on the ground plane.
         sensor_x = pose.transform.translation.x
         sensor_y = pose.transform.translation.y
+        
         if abs(pose.transform.translation.z) > 0.05:
             rospy.logwarn("%s: Turtlebot is not on ground plane.", self._name)
 
@@ -215,23 +215,28 @@ class OccupancyGrid2d(object):
             # Only update each voxel once. 
             # The occupancy grid is stored in self._map
 
-            x_vals = np.arange(sensor_x, sensor_x + np.cos(r), self._x_res)
-            y_vals = np.arange(sensor_y, sensor_y + np.sin(r), self._y_res)
+            #x_vals = np.arange(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), self._x_res/10)
+            #y_vals = np.arange(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), self._y_res/10)
+
+
+            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 150)
+            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 150)
 
             curr_voxel = ()
             for i in range(len(x_vals)):
                 prev_voxel = curr_voxel
                 curr_voxel = self.PointToVoxel(x_vals[i], y_vals[i])
+                print(x_vals[i], y_vals[i])
                 if (curr_voxel == prev_voxel):
                     continue
-                if (curr_voxel == self.PointToVoxel(sensor_x + np.cos(r), sensor_y + np.sin(r))):
+                if (curr_voxel == self.PointToVoxel(sensor_x + r*np.cos(angle_fixed_frame), sensor_y + r*np.sin(angle_fixed_frame))):
                     if (self._map[curr_voxel[0], curr_voxel[1]] + self._occupied_update > self._occupied_threshold):
                         continue
                     self._map[curr_voxel[0], curr_voxel[1]] += self._occupied_update
                 else:
                     if (self._map[curr_voxel[0], curr_voxel[1]] - self._occupied_update < self._free_threshold):
                         continue
-                    self._map[curr_voxel[0], curr_voxel[1]] -= self._free_update
+                    self._map[curr_voxel[0], curr_voxel[1]] += self._free_update
                 
         # Visualize.
         self.Visualize()

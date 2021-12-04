@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.h
+stdbool.h
+-
+stdint.h
+-
+kobukiUART.h
+/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUART.h
+
 /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorTypes.h
 stdint.h
 -
@@ -39,6 +47,28 @@ stddef.h
 -
 stdint.h
 -
+
+/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.c
+kobukiUtilities.h
+/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.h
+stdint.h
+-
+stdio.h
+-
+fcntl.h
+-
+errno.h
+-
+termios.h
+-
+unistd.h
+-
+sys/ioctl.h
+-
+kobukiSensorTypes.h
+/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiSensorTypes.h
+kobukiActuator.h
+/home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiActuator.h
 
 /home/pi/Desktop/EECS149/indi-romi-jones/software/libraries/kobuki/kobukiUtilities.h
 stdint.h

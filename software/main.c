@@ -177,7 +177,7 @@ int main(int argc, const char *argv[])
                     printf("scans: %d\n", scan.npoints);
     		        // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
                     point[1] = scan.points[i].range;
-                    point[2] = scan.points[i].angle * 57.29;
+                    point[2] = scan.points[i].angle;
                     printf("stamp: %d distance: %.2f angle: %.2f ticks (%d, %d)\n", point[0], point[1], point[2],
                                                                                              point[3], point[4]);
                     // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );

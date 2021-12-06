@@ -158,7 +158,7 @@ int main(int argc, const char *argv[])
 
     printf("started\n");
     kobukiUARTInit();
-    kobukiDriveDirect(30, 30);
+    kobukiDriveDirect(40, 40);
     kobukiUARTInit();
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
@@ -190,6 +190,7 @@ int main(int argc, const char *argv[])
                 fflush(stderr);
             }
         }
+        kobukiDriveDirect(0,0);
         LaserFanDestroy(&scan);
         turnOff(laser);
         disconnecting(laser);

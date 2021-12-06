@@ -159,6 +159,7 @@ class OccupancyGrid2d(object):
 
     # Callback to process sensor measurements.
     def SensorCallback(self, msg):
+        print("LaserScan Msg: ", msg)
         if not self._initialized:
             rospy.logerr("%s: Was not initialized.", self._name)
             return
@@ -216,8 +217,8 @@ class OccupancyGrid2d(object):
             # The occupancy grid is stored in self._map
 
 
-            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 150)
-            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 150)
+            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 500)
+            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 500)
 
             curr_voxel = ()
             for i in range(len(x_vals)):

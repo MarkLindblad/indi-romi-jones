@@ -2,7 +2,7 @@
   <!-- Topics to publish -->
 
   <!-- Static transform between lidar framd and romi base frame -->
-  <node pkg="tf2_ros" type="static_transform_publisher" name="romi_base" args="0 0 -0.1 0 0 0 base_link base_laser" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="romi_base" args="0 0 -0.1 0 0 0 base_link laser_frame" />
 
   <!-- parameters for romi.py  -->
   <node name="romi1" pkg="romi_robots" type="romi.py" output="screen" args="romi1"/>

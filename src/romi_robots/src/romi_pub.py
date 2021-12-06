@@ -13,19 +13,20 @@ from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 
 # YDLIDAR SPECIFICATIONS
-ANGLE_MIN = 0.0
-ANGLE_MAX = 360.0
-ANGLE_INCREMENT = 0.01
-TIME_INCREMENT = 0.1
-SCAN_TIME = 0.8
-RANGE_MIN = 0.12
-RANGE_MAX = 10.0
+ANGLE_MIN = -3.141593
+ANGLE_MAX = 3.141593
+ANGLE_INCREMENT = 0.012849
+TIME_INCREMENT = 0.000250
+SCAN_TIME = 0.122000
+RANGE_MIN = 0.100000
+RANGE_MAX = 12.000000
 INTENSITIES = []
 
 # ROMI ROBOT PHYSICAL SPECIFICATIONS
-WHEEL_TRACK = 11.2
-WHEEL_RADIUS = 0.36
-TICKS_PER_ROTATION = 351
+WHEEL_TRACK = 0.149
+WHEEL_RADIUS = 0.036
+# 72 * pi/1000*(1/0.0006108)
+TICKS_PER_ROTATION = 370
 
 class Romi():
     def __init__(self, name):
@@ -45,8 +46,8 @@ class Romi():
         # romi's old time
         self.old_time = rospy.Time.now()
         # broadcasting and publishing objects
-        self.laser_pub = rospy.Publisher("scan", LaserScan, queue_size=50)
-        self.odom_pub = rospy.Publisher("odom", Odometry, queue_size=50)
+        self.laser_pub = rospy.Publisher("scan", LaserScan, queue_size=1)
+        self.odom_pub = rospy.Publisher("odom", Odometry, queue_size=10)
         self.odom_broadcaster = tf.TransformBroadcaster()
 
     def publish_laser(self, range_data):
@@ -55,9 +56,10 @@ class Romi():
         scan.header.stamp = rospy.Time.now()
         scan.header.frame_id = 'laser_frame'
         scan.angle_min = ANGLE_MIN
-        scan.angle_max - ANGLE_MAX
+        scan.angle_max = ANGLE_MAX
         scan.angle_increment = ANGLE_INCREMENT
         scan.time_increment = TIME_INCREMENT
+        scan.scan_time = SCAN_TIME
         scan.range_min = RANGE_MIN
         scan.range_max = RANGE_MAX
         scan.ranges = []
@@ -66,11 +68,11 @@ class Romi():
             scan.ranges.append(r)
         self.laser_pub.publish(scan)
             
-    def get_forward_tick_delta(new_tick, old_tick):
-        if new_tick >= old_tick:
-            return new_tick - old_tick
-        else:
-            return (2 << 16 - old_tick) + new_tick
+    def get_forward_tick_delta(self, new_tick, old_tick):
+        CONVERSION = 0.0006108
+        if abs(new_tick - old_tick) > (1<<15): 
+            return CONVERSION*((1<<16) - abs(new_tick - old_tick))
+        return abs(CONVERSION*(new_tick - old_tick))
         
     def broadcast_and_publish_odom(self, left_tick_data, right_tick_data):
         current_time = rospy.Time.now()

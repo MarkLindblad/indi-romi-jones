@@ -127,9 +127,9 @@ int main(int argc, const char *argv[])
         //float prop
         float f_optval = 4.f;
         setlidaropt(laser, LidarPropScanFrequency, &f_optval, sizeof(float));
-        f_optval = 360.0f;
+        f_optval = 180.0f;
         setlidaropt(laser, LidarPropMaxAngle, &f_optval, sizeof(float));
-        f_optval = 0.0f;
+        f_optval = -180.0f;
         setlidaropt(laser, LidarPropMinAngle, &f_optval, sizeof(float));
         // f_optval = 8.f;
         f_optval = 10.f;
@@ -158,7 +158,7 @@ int main(int argc, const char *argv[])
 
     printf("started\n");
     kobukiUARTInit();
-    kobukiDriveDirect(40, 40);
+    kobukiDriveDirect(200, 200);
     kobukiUARTInit();
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;

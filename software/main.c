@@ -158,14 +158,12 @@ int main(int argc, const char *argv[])
 
     printf("started\n");
     kobukiUARTInit();
-    kobukiDriveDirect(200, 200);
-    kobukiUARTInit();
+    kobukiDriveDirect(50, 50);
+    kobukiUARTUnInit();
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     sensors.rightWheelEncoder = 0;
 
-
-    kobukiUARTUnInit();
         while (ret && os_isOk()) {
             if(doProcessSimple(laser, &scan)) {
                 kobukiSensorPoll(&sensors);
@@ -178,7 +176,7 @@ int main(int argc, const char *argv[])
     		        // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
                     point[1] = scan.points[i].range;
                     point[2] = scan.points[i].angle;
-                    printf("stamp: %d distance: %.2f angle: %.2f ticks (%d, %d)\n", point[0], point[1], point[2],
+                    printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", point[0], point[1], point[2],
                                                                                              point[3], point[4]);
                     // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
                     send(new_socket , point , 5 * sizeof(float) , 0 );
@@ -190,7 +188,9 @@ int main(int argc, const char *argv[])
                 fflush(stderr);
             }
         }
+        kobukiUARTInit();
         kobukiDriveDirect(0,0);
+        kobukiUARTUnInit();
         LaserFanDestroy(&scan);
         turnOff(laser);
         disconnecting(laser);

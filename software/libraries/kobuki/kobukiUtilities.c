@@ -48,12 +48,12 @@
   int serial_port;
   const int *port = &serial_port;
 int kobukiUARTInit() {
-  // serial_port = open("/dev/serial0", O_RDWR);
   serial_port = open("/dev/ttyAMA0", O_RDWR);
   // printf("(in port %d)", serial_port);
   // Check for errors
   if (serial_port < 0) {
       printf("Error %i from open: %s\n", errno, strerror(errno));
+      return -1;
   }
 
   struct termios UART;
@@ -87,6 +87,7 @@ int kobukiUARTInit() {
             printf("Error %i from tcsetattr: %s\n", errno, strerror(errno));
         }
         UARTFlush();
+        return 1;
 }
 
 void UARTFlush(){
@@ -94,7 +95,7 @@ void UARTFlush(){
         int bytes_available;
         int retval = ioctl(serial_port, FIONREAD, &bytes_available);
         if (retval < 0) {
-          perror("FIONREAD ioctl failed\n");
+          perror("FIONREAD ioctl failed: ");
           exit(7);
               printf("UART initialized?");
         }
@@ -114,8 +115,11 @@ int UARTRead(uint8_t * buffer, uint8_t len){
 
 int kobukiUARTUnInit() {
   if (close(serial_port) != 0){
-    printf("couldn't close UART");
+    printf("couldn't close UART\n");
+    printf("srial port is: %d, *port is %d", serial_port, *port);
+    return -1;
   }
+  return 1;
 }
 
 // int kobukiInit() {

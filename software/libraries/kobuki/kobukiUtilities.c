@@ -113,7 +113,9 @@ int UARTRead(uint8_t * buffer, uint8_t len){
 }
 
 int kobukiUARTUnInit() {
-  close(serial_port);
+  if (close(serial_port) != 0){
+    printf("couldn't close UART");
+  }
 }
 
 // int kobukiInit() {

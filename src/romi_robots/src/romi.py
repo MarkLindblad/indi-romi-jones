@@ -19,7 +19,8 @@ import struct
 # Port on which you want to connect
 _PORT = 8080
 # IP Address
-_IP_ADDRESS = '172.20.10.6' 
+#_IP_ADDRESS = '172.20.10.6' 
+_IP_ADDRESS = '192.168.137.238' 
 
 # TODO Romi() requires sensor data
 def main(args):
@@ -34,34 +35,37 @@ def main(args):
     # instantiate romi object
     romi = Romi(romi_name)
     count = 0
+    old_time_stamp = 0.0
     ranges = []
     #time_stamps = []
     while not rospy.is_shutdown():
         #Receive sensor data
-        time_data = struct.unpack('f', sock.recv(4))[0]
+        new_time_stamp = struct.unpack('f', sock.recv(4))[0]
         range_data = struct.unpack('f', sock.recv(4))[0] 
         angle_data = struct.unpack('f', sock.recv(4))[0]
         left_tick_data = struct.unpack('i', sock.recv(4))[0]
         right_tick_data = struct.unpack('i', sock.recv(4))[0]
         ranges.append(range_data)
-        #time_stamps.append(time_data)
+        if count == 0:
+            old_time_stamp = new_time_stamp
+            count += 1
         #Print for debugging
         print("###############################\n")
         print("Laser Range: \n", range_data)
         print("Laser Angle \n", angle_data)
-        print("Laser Time Stamp: \n", time_data)
+        print("Laser Time Stamp: \n", new_time_stamp)
         print("Left Ticks : \n", left_tick_data)
         print("Right Ticks: ", right_tick_data)
         print("###############################\n")
-        if count == 360:
+        if new_time_stamp != old_time_stamp:
             # publish laser data
             romi.publish_laser(ranges)
-            count = 0
+            old_time_stamp = new_time_stamp
             ranges = []
-            #time_stamps = []
+            
         # publish odom data
         romi.broadcast_and_publish_odom(0, 0)
-        count += 1
+        old_time_stamp = new_time_stamp
         
 
 if __name__ == '__main__':

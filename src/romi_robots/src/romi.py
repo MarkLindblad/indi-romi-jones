@@ -14,13 +14,15 @@ import numpy as np
 # from romi robots via WIFI
 import socket            
 import struct 
-
+# COMMAND
+# callback(command)
+#  COMMAND = command.msg
 
 # Port on which you want to connect
 _PORT = 8080
 # IP Address
-#_IP_ADDRESS = '172.20.10.6' 
-_IP_ADDRESS = '192.168.137.238' 
+_IP_ADDRESS = '172.20.10.6' 
+#_IP_ADDRESS = '192.168.137.238' 
 
 # TODO Romi() requires sensor data
 def main(args):
@@ -28,6 +30,7 @@ def main(args):
     romi_name = args[1]
     # Create a socket object
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #Subrcribe to command topic
     #connect to the server on local computer
     sock.connect((_IP_ADDRESS, _PORT))
     #initialize ROS node 
@@ -35,20 +38,19 @@ def main(args):
     # instantiate romi object
     romi = Romi(romi_name)
     count = 0
-    old_time_stamp = 0.0
+    #old_time_stamp = 0.0
     ranges = []
     #time_stamps = []
     while not rospy.is_shutdown():
-        #Receive sensor data
-        new_time_stamp = struct.unpack('f', sock.recv(4))[0]
+        new_time_stamp = struct.unpack('i', sock.recv(4))[0]
         range_data = struct.unpack('f', sock.recv(4))[0] 
         angle_data = struct.unpack('f', sock.recv(4))[0]
         left_tick_data = struct.unpack('i', sock.recv(4))[0]
         right_tick_data = struct.unpack('i', sock.recv(4))[0]
         ranges.append(range_data)
-        if count == 0:
-            old_time_stamp = new_time_stamp
-            count += 1
+        # if count == 0:
+        #     old_time_stamp = new_time_stamp
+        #     count += 1
         #Print for debugging
         print("###############################\n")
         print("Laser Range: \n", range_data)
@@ -57,15 +59,16 @@ def main(args):
         print("Left Ticks : \n", left_tick_data)
         print("Right Ticks: ", right_tick_data)
         print("###############################\n")
-        if new_time_stamp != old_time_stamp:
+        if count > 360:
             # publish laser data
             romi.publish_laser(ranges)
-            old_time_stamp = new_time_stamp
+            #old_time_stamp = new_time_stamp
             ranges = []
+            count = 0
             
         # publish odom data
         romi.broadcast_and_publish_odom(0, 0)
-        old_time_stamp = new_time_stamp
+        count += 1
         
 
 if __name__ == '__main__':

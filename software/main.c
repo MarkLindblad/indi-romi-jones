@@ -161,9 +161,9 @@ int main(int argc, const char *argv[])
     state_t state = Scanning;
 
     printf("started\n");
-    kobukiUARTInit();
+
     kobukiDriveDirect(50, 50);
-    kobukiUARTUnInit();
+    
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     sensors.rightWheelEncoder = 0;

@@ -48,6 +48,7 @@
   int serial_port;
   const int *port = &serial_port;
 int kobukiUARTInit() {
+  printf("Initializing UART\n");
   serial_port = open("/dev/ttyAMA0", O_RDWR);
   // printf("(in port %d)", serial_port);
   // Check for errors
@@ -114,6 +115,7 @@ int UARTRead(uint8_t * buffer, uint8_t len){
 }
 
 int kobukiUARTUnInit() {
+  printf("Unitializing UART\n");
   if (close(serial_port) != 0){
     printf("couldn't close UART\n");
     printf("srial port is: %d, *port is %d", serial_port, *port);

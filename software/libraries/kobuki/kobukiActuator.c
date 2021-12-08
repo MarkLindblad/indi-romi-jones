@@ -31,7 +31,7 @@ static int32_t kobukiSendPayload(uint8_t* payload, uint8_t len) {
     writeData[2] = len;
     memcpy(writeData + 3, payload, len);
 	writeData[3+len] = checkSum(writeData, 3 + len);
-    printf("(port %d)", *port);
+    // printf("(port %d)", *port);
     int status = write(*port, writeData, len + 4);
     // printf("(port %d\n)", serial_ref);
     kobukiUARTUnInit();

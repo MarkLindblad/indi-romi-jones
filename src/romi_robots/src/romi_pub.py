@@ -70,14 +70,24 @@ class Romi():
             
     def get_forward_tick_delta(self, new_tick, old_tick):
         CONVERSION = 0.0006108
+        """
         if abs(new_tick - old_tick) > (1<<15): 
             return CONVERSION*((1<<16) - abs(new_tick - old_tick))
         return abs(CONVERSION*(new_tick - old_tick))
+        """
+        if new_tick < old_tick:
+            #print("============== diff:", (1 << 16) - old_tick + new_tick )
+            return CONVERSION * float( (1 << 16) - old_tick + new_tick )
+        else:
+            #print("============== reg:", new_tick - old_tick, new_tick)
+            return CONVERSION * float(new_tick - old_tick)
         
     def broadcast_and_publish_odom(self, left_tick_data, right_tick_data):
         current_time = rospy.Time.now()
         delta_left = self.get_forward_tick_delta(left_tick_data, self.old_left_ticks)
         delta_right = self.get_forward_tick_delta(right_tick_data, self.old_right_ticks)
+        print("Left Encoder: \n", delta_left)
+        print("Right Encoder: \n", delta_right)
         dl = 2 * np.pi * delta_left / TICKS_PER_ROTATION
         dr = 2 * np.pi * delta_right / TICKS_PER_ROTATION
         dc = (dl + dr) / 2

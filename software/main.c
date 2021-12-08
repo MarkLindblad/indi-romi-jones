@@ -150,72 +150,99 @@ int main(int argc, const char *argv[])
         LaserFan scan;
         LaserFanInit(&scan);
 
-    // typedef enum{
-    //     scanning,
-    //     sending,
-    //     drive,
-    // }state;
+    typedef enum{
+        Scanning,
+        Send,
+        Receive,
+        Drive,
+        Close
+    }state_t;
 
+    state_t state = Scanning;
 
     printf("started\n");
     kobukiUARTInit();
-    kobukiDriveDirect(200, 200);
-    kobukiUARTInit();
+    kobukiDriveDirect(50, 50);
+    kobukiUARTUnInit();
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     sensors.rightWheelEncoder = 0;
-
-struct packet {
-  float stamp;
-  float range;
-  float angle;
-  int leftWheelEncoder;
-  int rightWheelEncoder;      
-};
-
-    kobukiUARTUnInit();
-        while (ret && os_isOk()) {
-            if(doProcessSimple(laser, &scan)) {
-                kobukiSensorPoll(&sensors);
-                struct packet pkt;
-                pkt.stamp = scan.stamp;
-                pkt.leftWheelEncoder = 0;
-                pkt.leftWheelEncoder = sensors.leftWheelEncoder;
-                pkt.rightWheelEncoder = 0;
-                pkt.rightWheelEncoder = sensors.rightWheelEncoder;
-                
-                /*
-                float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
-                point[0] = scan.stamp;
-                point[3] = sensors.leftWheelEncoder;
-                point[4] = sensors.rightWheelEncoder;
-                */
-               for (int i = 0; i < scan.npoints; i++){
-    		        // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
-                        /*
-                    point[1] = scan.points[i].range;
-                    point[2] = scan.points[i].angle;
+    
+    struct packet {
+      float stamp;
+      float range;
+      float angle;
+      int leftWheelEncoder;
+      int rightWheelEncoder;      
+    };
+    struct packet pkt;
+    pkt.leftWheelEncoder = 0;
+    pkt.rightWheelEncoder = 0;
+        while (1) {
+            switch (state) {
+                case Scanning:
+                    if(ret && os_isOk()) {
+                        if(doProcessSimple(laser, &scan)) {
+                            kobukiSensorPoll(&sensors);
+                            state = Send;
+                        }
+                    } else {
+                        fprintf(stderr, "Failed to get Lidar Data\n");
+                        fflush(stderr);
+                        state = Close;
+                    }
+                    break;
+                case Send:
+                    //float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
+                    pkt.stamp = scan.stamp;
+                    pkt.leftWheelEncoder = sensors.leftWheelEncoder;
+                    pkt.rightWheelEncoder = sensors.rightWheelEncoder;
+                    /*
+                    point[0] = scan.stamp;
+                    point[3] = sensors.leftWheelEncoder;
+                    point[4] = sensors.rightWheelEncoder;
                     */
-                    pkt.range = scan.points[i].range;
-                    pkt.angle = scan.points[i].angle;
-                    
-                    //printf("ticks: (%d, %d)\n", point[3], point[4]);
-                    printf("ticks: (%d, %d)\n", pkt.leftWheelEncoder, pkt.rightWheelEncoder);
-                    // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
-                    //send(new_socket , point , 5 * sizeof(float) , 0 );
-                    send(new_socket , &pkt , sizeof(struct packet) , 0 );
-                    fflush(stdout);
-               }
+                    for (int i = 0; i < scan.npoints; i++){
+                            printf("scans: %d\n", scan.npoints);
+                            // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
+                            /*point[1] = scan.points[i].range;
+                            point[2] = scan.points[i].angle;*/
+                            
+                            pkt.range = scan.points[i].range;
+                            pkt.angle = scan.points[i].angle;
+                            
+                            printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", pkt.stamp, pkt.range, pkt.angle,
+                                                                                                        pkt.leftWheelEncoder, pkt.rightWheelEncoder);
+                            
+                            /*printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", point[0], point[1], point[2],
+                                                                                                        point[3], point[4]);*/
+                            // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
+                            // send(new_socket , point , 5 * sizeof(float) , 0 );
+                            send(new_socket, &pkt, sizeof(struct packet), 0 );
+                            fflush(stdout);
+                        }
+                    state = Drive;
+                    break;
 
-            } else {
-                fprintf(stderr, "Failed to get Lidar Data\n");
-                fflush(stderr);
+                case Receive:
+                    break;
+
+                case Drive:
+                    kobukiUARTInit();
+                    kobukiDriveDirect(50, 50);
+                    kobukiUARTUnInit();
+                    state = Scanning;
+                    break;
+                
+                case Close:
+                    kobukiUARTInit();
+                    kobukiDriveDirect(0,0);
+                    kobukiUARTUnInit();
+                    LaserFanDestroy(&scan);
+                    turnOff(laser);
+                    disconnecting(laser);
+                    lidarDestroy(&laser);
+                    return 0;
             }
-        }
-        kobukiDriveDirect(0,0);
-        LaserFanDestroy(&scan);
-        turnOff(laser);
-        disconnecting(laser);
-        lidarDestroy(&laser);
-    return 0;
+        }        
 }

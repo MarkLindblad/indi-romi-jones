@@ -84,6 +84,7 @@ int main(int argc, const char *argv[])
         //------------LIDAR init--------------------
 
         os_init();
+        
         YDLidar *laser = lidarCreate();
         //string prop
         char port[50] = "/dev/ydlidar";
@@ -164,24 +165,45 @@ int main(int argc, const char *argv[])
     sensors.leftWheelEncoder = 0;
     sensors.rightWheelEncoder = 0;
 
+struct packet {
+  float stamp;
+  float range;
+  float angle;
+  int leftWheelEncoder;
+  int rightWheelEncoder;      
+};
 
     kobukiUARTUnInit();
         while (ret && os_isOk()) {
             if(doProcessSimple(laser, &scan)) {
                 kobukiSensorPoll(&sensors);
+                struct packet pkt;
+                pkt.stamp = scan.stamp;
+                pkt.leftWheelEncoder = 0;
+                pkt.leftWheelEncoder = sensors.leftWheelEncoder;
+                pkt.rightWheelEncoder = 0;
+                pkt.rightWheelEncoder = sensors.rightWheelEncoder;
+                
+                /*
                 float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
                 point[0] = scan.stamp;
                 point[3] = sensors.leftWheelEncoder;
-                point [4] = sensors.rightWheelEncoder;
+                point[4] = sensors.rightWheelEncoder;
+                */
                for (int i = 0; i < scan.npoints; i++){
-                    printf("scans: %d\n", scan.npoints);
     		        // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
+                        /*
                     point[1] = scan.points[i].range;
                     point[2] = scan.points[i].angle;
-                    printf("stamp: %d distance: %.2f angle: %.2f ticks (%d, %d)\n", point[0], point[1], point[2],
-                                                                                             point[3], point[4]);
+                    */
+                    pkt.range = scan.points[i].range;
+                    pkt.angle = scan.points[i].angle;
+                    
+                    //printf("ticks: (%d, %d)\n", point[3], point[4]);
+                    printf("ticks: (%d, %d)\n", pkt.leftWheelEncoder, pkt.rightWheelEncoder);
                     // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
-                    send(new_socket , point , 5 * sizeof(float) , 0 );
+                    //send(new_socket , point , 5 * sizeof(float) , 0 );
+                    send(new_socket , &pkt , sizeof(struct packet) , 0 );
                     fflush(stdout);
                }
 

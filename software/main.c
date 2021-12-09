@@ -36,13 +36,13 @@
 #define SEND true
 
 int main(int argc, const char *argv[])
-{
-    if (SEND){
-    //--------------socket------------------------
-       int server_fd, new_socket, valread;
+{   int server_fd, new_socket, valread;
         struct sockaddr_in address;
         int opt = 1;
         int addrlen = sizeof(address);
+    if (SEND){
+    //--------------socket------------------------
+       
        // perror("started");
         // Creating socket file descriptor
         if ((server_fd = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -61,7 +61,6 @@ int main(int argc, const char *argv[])
         address.sin_family = AF_INET;
         address.sin_addr.s_addr = INADDR_ANY;
         address.sin_port = htons( PORT );
-           printf("here");
         // Forcefully attaching socket to the port 8080
         if (bind(server_fd, (struct sockaddr *)&address,
                                      sizeof(address))<0)
@@ -219,7 +218,9 @@ int main(int argc, const char *argv[])
                             printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", point[0], point[1], point[2],
                                                                                                         point[3], point[4]);
                             // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
-                            // send(new_socket , point , 5 * sizeof(float) , 0 );
+                            if (SEND){
+                                send(new_socket , point , 5 * sizeof(float) , 0 );
+                            }
                             // send(new_socket, &pkt, sizeof(struct packet), 0 );
                             fflush(stdout);
                         }

@@ -55,7 +55,10 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
   // serialFlush(*serial_ref); ///--------------------------------
   
   int num_checksum_failures = 0;
-  if (len <= 4) return -1;
+  if (len <= 4){
+    kobukiUARTUnInit();
+    return -1;
+  }
 
   while(1){
     // printf("state %d\n", state);
@@ -73,6 +76,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
               printf("Failed to recieve from robot.\n\tIs robot powered on?\n\tTry unplugging buckler from USB and power cycle robot\n");
             }
             aa_count = 0;
+            kobukiUARTUnInit();
             return header_buf[0];
           }
       
@@ -87,6 +91,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
             printf("Failed to recieve from robot.\n\tIs robot powered on?\n\tTry unplugging buckler from USB and power cycle robot\n");
           }
           aa_count = 0;
+          kobukiUARTUnInit();
           return status;
           }
             
@@ -107,10 +112,14 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
           // status = nrf_serial_read(serial_ref, &payloadSize, sizeof(payloadSize), NULL, 100);
           status = read(*port, (void*)&payloadSize, sizeof(payloadSize));
           if(status < 0) {
+            kobukiUARTUnInit();
             return status;
           }
 
-          if(len < payloadSize+3) return -1;
+          if(len < payloadSize+3){
+              kobukiUARTUnInit();
+              return -1;
+          }
 
           state = read_payload;
           // UARTFlush();
@@ -126,6 +135,7 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
             // printf("read %x / %x ",status, payloadSize + 1);
           }
           if(status < 0) {
+            kobukiUARTUnInit();
             return status;
           }
 
@@ -144,10 +154,12 @@ int32_t kobukiReadFeedbackPacket(uint8_t* packetBuffer, uint8_t len){
           byteBuffer=(packetBuffer)[payloadSize+3];
           if (calcuatedCS == byteBuffer) {
             num_checksum_failures = 0;
+            kobukiUARTUnInit();
             return NRF_SUCCESS;
           } else{
             state = wait_until_AA;
             if (num_checksum_failures == 3) {
+              kobukiUARTUnInit();
               return -1500;
             }
             num_checksum_failures++;

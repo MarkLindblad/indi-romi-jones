@@ -33,11 +33,11 @@
 // #include <errno.h>
 // #include <termios.h>
 // #include <unistd.h>
-#define SEND true
+
 
 int main(int argc, const char *argv[])
 {
-    if (SEND){
+    
     //--------------socket------------------------
        int server_fd, new_socket, valread;
         struct sockaddr_in address;
@@ -80,11 +80,10 @@ int main(int argc, const char *argv[])
             perror("accept");
             exit(EXIT_FAILURE);
         }
-        }
+
         //------------LIDAR init--------------------
 
         os_init();
-        
         YDLidar *laser = lidarCreate();
         //string prop
         char port[50] = "/dev/ydlidar";
@@ -150,97 +149,51 @@ int main(int argc, const char *argv[])
         LaserFan scan;
         LaserFanInit(&scan);
 
-    typedef enum{
-        Scanning,
-        Send,
-        Receive,
-        Drive,
-        Close
-    }state_t;
+    // typedef enum{
+    //     scanning,
+    //     sending,
+    //     drive,
+    // }state;
 
-    state_t state = Scanning;
 
     printf("started\n");
-
-    kobukiDriveDirect(50, 50);
-    
+    kobukiUARTInit();
+    kobukiDriveDirect(200, 200);
+    kobukiUARTInit();
     KobukiSensors_t sensors;
     sensors.leftWheelEncoder = 0;
     sensors.rightWheelEncoder = 0;
-    
-    struct packet {
-      float stamp;
-      float range;
-      float angle;
-      int leftWheelEncoder;
-      int rightWheelEncoder;      
-    };
-    struct packet pkt;
-    pkt.leftWheelEncoder = 0;
-    pkt.rightWheelEncoder = 0;
-    
-        while (1) {
-            switch (state) {
-                case Scanning:
-                    if(ret && os_isOk()) {
-                        if(doProcessSimple(laser, &scan)) {
-                            kobukiSensorPoll(&sensors);
-                            state = Send;
-                        }
-                    } else {
-                        fprintf(stderr, "Failed to get Lidar Data\n");
-                        fflush(stderr);
-                        state = Close;
-                    }
-                    break;
-                case Send:
-                    ;
-                    float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
-                    // pkt.stamp = scan.stamp;
-                    // pkt.leftWheelEncoder = sensors.leftWheelEncoder;
-                    // pkt.rightWheelEncoder = sensors.rightWheelEncoder;
-                    
-                    point[0] = scan.stamp;
-                    point[3] = sensors.leftWheelEncoder;
-                    point[4] = sensors.rightWheelEncoder;
-                    
-                    for (int i = 0; i < scan.npoints; i++){
-                            // printf("scans: %d\n", scan.npoints);
-                            // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
-                            point[1] = scan.points[i].range;
-                            point[2] = scan.points[i].angle;
-                            
-                            // pkt.range = scan.points[i].range;
-                            // pkt.angle = scan.points[i].angle;
-                            
-                            // printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", pkt.stamp, pkt.range, pkt.angle,
-                                                                                                        // pkt.leftWheelEncoder, pkt.rightWheelEncoder);
-                            
-                            printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", point[0], point[1], point[2],
-                                                                                                        point[3], point[4]);
-                            // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
-                            // send(new_socket , point , 5 * sizeof(float) , 0 );
-                            // send(new_socket, &pkt, sizeof(struct packet), 0 );
-                            fflush(stdout);
-                        }
-                    state = Drive;
-                    break;
 
-                case Receive:
-                    break;
 
-                case Drive:
-                    kobukiDriveDirect(50, 50);
-                    state = Scanning;
-                    break;
-                
-                case Close:
-                    kobukiDriveDirect(0,0);
-                    LaserFanDestroy(&scan);
-                    turnOff(laser);
-                    disconnecting(laser);
-                    lidarDestroy(&laser);
-                    return 0;
+    kobukiUARTUnInit();
+        while (ret && os_isOk()) {
+            if(doProcessSimple(laser, &scan)) {
+                kobukiSensorPoll(&sensors);
+                float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
+                point[0] = scan.stamp;
+                point[3] = sensors.leftWheelEncoder;
+                point [4] = sensors.rightWheelEncoder;
+               for (int i = 0; i < scan.npoints; i++){
+                    printf("scans: %d\n", scan.npoints);
+    		        // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
+                    point[1] = scan.points[i].range;
+                    point[2] = scan.points[i].angle;
+                    printf("stamp: %d distance: %.2f angle: %.2f ticks (%d, %d)\n", point[0], point[1], point[2],
+                                                                                             point[3], point[4]);
+                    // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
+                    send(new_socket , point , 5 * sizeof(float) , 0 );
+                    fflush(stdout);
+               }
+
+            } else {
+                fprintf(stderr, "Failed to get Lidar Data\n");
+                fflush(stderr);
             }
-        }        
+        }
+        kobukiDriveDirect(0,0);
+        LaserFanDestroy(&scan);
+        turnOff(laser);
+        disconnecting(laser);
+        lidarDestroy(&laser);
+    return 0;
 }

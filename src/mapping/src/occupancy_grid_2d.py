@@ -217,8 +217,8 @@ class OccupancyGrid2d(object):
             # The occupancy grid is stored in self._map
 
 
-            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 500)
-            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 500)
+            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 50)
+            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 50)
 
             curr_voxel = ()
             for i in range(len(x_vals)):

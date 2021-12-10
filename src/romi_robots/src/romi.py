@@ -13,16 +13,12 @@ import numpy as np
 # Import socket module to read sensor data
 # from romi robots via WIFI
 import socket            
-import struct 
-# COMMAND
-# callback(command)
-#  COMMAND = command.msg
+import struct
 
 # Port on which you want to connect
 _PORT = 8080
 # IP Address
-_IP_ADDRESS = '172.20.10.6' 
-#_IP_ADDRESS = '192.168.137.238' 
+_IP_ADDRESS = '172.20.10.6'  
 
 # TODO Romi() requires sensor data
 def main(args):
@@ -38,38 +34,28 @@ def main(args):
     # instantiate romi object
     romi = Romi(romi_name)
     count = 0
-    #old_time_stamp = 0.0
+    # flag
     ranges = []
-    #time_stamps = []
+    #rospy.Timer(rospy.Duration(3), romi.publish_sensor_data)
+    
     while not rospy.is_shutdown():
+        # Receive Sensor Data from Romi
         new_time_stamp = struct.unpack('i', sock.recv(4))[0]
         range_data = struct.unpack('f', sock.recv(4))[0] 
         angle_data = struct.unpack('f', sock.recv(4))[0]
         left_tick_data = struct.unpack('i', sock.recv(4))[0]
         right_tick_data = struct.unpack('i', sock.recv(4))[0]
         ranges.append(range_data)
-        # if count == 0:
-        #     old_time_stamp = new_time_stamp
-        #     count += 1
-        #Print for debugging
-        print("###############################\n")
-        print("Laser Range: \n", range_data)
-        print("Laser Angle \n", angle_data)
-        print("Laser Time Stamp: \n", new_time_stamp)
-        print("Left Ticks : \n", left_tick_data)
-        print("Right Ticks: ", right_tick_data)
-        print("###############################\n")
-        if count > 360:
-            # publish laser data
-            romi.publish_laser(ranges)
-            #old_time_stamp = new_time_stamp
+        #Publish and broadcast when time stamp changes
+        if count == 430:
+            # publish laser and wheel encoder data
+            romi.publish_sensor_data(ranges, left_tick_data, right_tick_data)
             ranges = []
             count = 0
-            
-        # publish odom data
-        romi.broadcast_and_publish_odom(0, 0)
         count += 1
-        
+
+        #romi.set_data(range_data, left_tick_data, right_tick_data)
+
 
 if __name__ == '__main__':
     try:

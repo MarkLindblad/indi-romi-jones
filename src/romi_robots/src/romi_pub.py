@@ -41,19 +41,33 @@ class Romi():
         self.vy = 0.0
         self.omega = 0.0
         # romi's old wheel encoder data
-        self.old_left_ticks = 0.0
-        self.old_right_ticks = 0.0
+        self.old_left_ticks = 0
+        self.old_right_ticks = 0
         # romi's old time
         self.old_time = rospy.Time.now()
+        # lidar ranges
+        self.ranges = []
         # broadcasting and publishing objects
-        self.laser_pub = rospy.Publisher("scan", LaserScan, queue_size=1)
-        self.odom_pub = rospy.Publisher("odom", Odometry, queue_size=10)
+        self.laser_pub = rospy.Publisher("/scan", LaserScan, queue_size=1)
+        self.odom_pub = rospy.Publisher("odom", Odometry, queue_size=1)
         self.odom_broadcaster = tf.TransformBroadcaster()
 
-    def publish_laser(self, range_data):
+        # self.ranges = []
+        # self.left_tick_data = 0
+        # self.right_tick_data = 0
+
+    # def set_data(self, range, left, right):
+    #     self.ranges.append(range)
+    #     self.left_tick_data = left
+    #     self.right_tick_data = right
+    
+
+    def publish_sensor_data(self, ranges, left_tick_data, right_tick_data):
+        current_time = rospy.Time.now()
+
         # Publish to laser topic
         scan = LaserScan()
-        scan.header.stamp = rospy.Time.now()
+        scan.header.stamp = current_time
         scan.header.frame_id = 'laser_frame'
         scan.angle_min = ANGLE_MIN
         scan.angle_max = ANGLE_MAX
@@ -64,30 +78,15 @@ class Romi():
         scan.range_max = RANGE_MAX
         scan.ranges = []
         scan.intensities = []
-        for r in range_data:
+        for r in ranges:
             scan.ranges.append(r)
         self.laser_pub.publish(scan)
-            
-    def get_forward_tick_delta(self, new_tick, old_tick):
-        CONVERSION = 0.0006108
-        """
-        if abs(new_tick - old_tick) > (1<<15): 
-            return CONVERSION*((1<<16) - abs(new_tick - old_tick))
-        return abs(CONVERSION*(new_tick - old_tick))
-        """
-        if new_tick < old_tick:
-            #print("============== diff:", (1 << 16) - old_tick + new_tick )
-            return CONVERSION * float( (1 << 16) - old_tick + new_tick )
-        else:
-            #print("============== reg:", new_tick - old_tick, new_tick)
-            return CONVERSION * float(new_tick - old_tick)
-        
-    def broadcast_and_publish_odom(self, left_tick_data, right_tick_data):
-        current_time = rospy.Time.now()
+
+        ##########################ODOMETRY##################################333
         delta_left = self.get_forward_tick_delta(left_tick_data, self.old_left_ticks)
         delta_right = self.get_forward_tick_delta(right_tick_data, self.old_right_ticks)
-        print("Left Encoder: \n", delta_left)
-        print("Right Encoder: \n", delta_right)
+        # print("Left Encoder: \n", left_tick_data, self.old_left_ticks)
+        # print("Right Encoder: \n", right_tick_data, self.old_right_ticks)
         dl = 2 * np.pi * delta_left / TICKS_PER_ROTATION
         dr = 2 * np.pi * delta_right / TICKS_PER_ROTATION
         dc = (dl + dr) / 2
@@ -132,3 +131,19 @@ class Romi():
         self.old_left_ticks = left_tick_data
         self.old_right_ticks = right_tick_data
         self.old_time = current_time
+
+    
+            
+    def get_forward_tick_delta(self, new_tick, old_tick):
+        # CONVERSION = 0.0006108  for getting distance, we only need the delta_tick !!!!!!
+        """
+        if abs(new_tick - old_tick) > (1<<15): 
+            return CONVERSION*((1<<16) - abs(new_tick - old_tick))
+        return abs(CONVERSION*(new_tick - old_tick))
+        """
+        if new_tick < old_tick:
+            #print("============== diff:", (1 << 16) - old_tick + new_tick )
+            return (1 << 16) - old_tick + new_tick 
+        else:
+            #print("============== reg:", new_tick - old_tick, new_tick)
+            return (new_tick - old_tick)

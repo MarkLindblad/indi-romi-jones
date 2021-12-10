@@ -1,2 +1,2 @@
-romi_robots
+exploration:mapping:romi_robots:slam_gmapping/gmapping:slam_gmapping/slam_gmapping
 -DCATKIN_DEVEL_PREFIX=/home/williamcatzin/indi_workspace/devel -DCMAKE_INSTALL_PREFIX=/home/williamcatzin/indi_workspace/install -G Unix Makefiles

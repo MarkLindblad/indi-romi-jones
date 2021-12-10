@@ -5,4 +5,8 @@
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
 subdirs("gtest")
+subdirs("exploration")
+subdirs("slam_gmapping/slam_gmapping")
+subdirs("mapping")
+subdirs("slam_gmapping/gmapping")
 subdirs("romi_robots")

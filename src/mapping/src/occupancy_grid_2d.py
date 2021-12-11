@@ -11,7 +11,7 @@ import tf
 
 from sensor_msgs.msg import LaserScan
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Point
+from geometry_msgs.msg import Point, Pose, Quaternion
 from std_msgs.msg import ColorRGBA
 
 import numpy as np
@@ -144,16 +144,14 @@ class OccupancyGrid2d(object):
         return True
 
     def RegisterCallbacks(self):
-        # Subscriber.
-        self._sensor_sub = rospy.Subscriber(self._sensor_topic,
-                                            LaserScan,
-                                            self.SensorCallback,
-                                            queue_size=1)
+        # Subscriber to scan from indi_romi.py
+        self._sensor_sub = rospy.Subscriber(self._sensor_topic, LaserScan, self.SensorCallback, queue_size=1)
 
-        # Publisher.
-        self._vis_pub = rospy.Publisher(self._vis_topic,
-                                        Marker,
-                                        queue_size=10)
+        # Publishes Marker objects for rviz map visualization
+        self._vis_pub = rospy.Publisher(self._vis_topic, Marker, queue_size=10)
+
+        # Publishes Pose data for path_planner.py
+        self._pose_pub = rospy.Publisher("pose", Pose, queue_size=10)
 
         return True
 
@@ -215,8 +213,6 @@ class OccupancyGrid2d(object):
             # Update log-odds at each voxel along the way.
             # Only update each voxel once. 
             # The occupancy grid is stored in self._map
-
-
             y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 50)
             x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 50)
 
@@ -237,6 +233,7 @@ class OccupancyGrid2d(object):
                 
         # Visualize.
         self.Visualize()
+        self._pose_pub(Pose(Point(sensor_x, sensor_y, 0), Quaternion(0, 0, 0, 0)))
 
     # Convert (x, y) coordinates in fixed frame to grid coordinates.
     def PointToVoxel(self, x, y):
@@ -285,6 +282,8 @@ class OccupancyGrid2d(object):
         m.scale.x = self._x_res
         m.scale.y = self._y_res
         m.scale.z = 0.01
+        m.lifetime = 0
+        m.frame_locked = True
 
         for ii in range(self._x_num):
             for jj in range(self._y_num):

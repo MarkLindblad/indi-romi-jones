@@ -1,0 +1,1 @@
+# Node class represents nodes in the maze

@@ -11,6 +11,7 @@ import numpy as np
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
+from romi_state import State
 
 # YDLIDAR SPECIFICATIONS
 ANGLE_MIN = -3.141593
@@ -45,27 +46,24 @@ class Romi():
         self.old_right_ticks = 0
         # romi's old time
         self.old_time = rospy.Time.now()
-        # lidar ranges
-        self.ranges = []
         # broadcasting and publishing objects
-        self.laser_pub = rospy.Publisher("/scan", LaserScan, queue_size=1)
+        self.laser_pub = rospy.Publisher("scan", LaserScan, queue_size=1)
+        self.avg_laser_pub = rospy.Publisher("avg_scan", LaserScan, queue_size=1)
         self.odom_pub = rospy.Publisher("odom", Odometry, queue_size=1)
         self.odom_broadcaster = tf.TransformBroadcaster()
-
-        # self.ranges = []
-        # self.left_tick_data = 0
-        # self.right_tick_data = 0
-
-    # def set_data(self, range, left, right):
-    #     self.ranges.append(range)
-    #     self.left_tick_data = left
-    #     self.right_tick_data = right
+        # Direction of romi
+        self.direction = ''
+        # Initial state 
+        self.state = State.Receive
     
+    def callback(self, msg):
+        self.direction = msg.data
+        self.state = State.Send
 
-    def publish_sensor_data(self, ranges, left_tick_data, right_tick_data):
+    def publish_sensor_data(self, ranges, left_tick_data, right_tick_data, avgs):
         current_time = rospy.Time.now()
 
-        # Publish to laser topic
+        ############################Publish laser range data###############################
         scan = LaserScan()
         scan.header.stamp = current_time
         scan.header.frame_id = 'laser_frame'
@@ -82,7 +80,25 @@ class Romi():
             scan.ranges.append(r)
         self.laser_pub.publish(scan)
 
-        ##########################ODOMETRY##################################333
+        #############################Publish average laser range data########################
+        avg_scan = LaserScan()
+        avg_scan.header.stamp = current_time
+        avg_scan.header.frame_id = 'laser_frame'
+        avg_scan.angle_min = ANGLE_MIN
+        avg_scan.angle_max = ANGLE_MAX
+        avg_scan.angle_increment = ANGLE_INCREMENT
+        avg_scan.time_increment = TIME_INCREMENT
+        avg_scan.scan_time = SCAN_TIME
+        avg_scan.range_min = RANGE_MIN
+        avg_scan.range_max = RANGE_MAX
+        avg_scan.ranges = []
+        avg_scan.intensities = []
+        for r in avgs:
+            avg_scan.ranges.append(r)
+        self.avg_laser_pub.publish(avg_scan)
+
+
+        ########################################ODOMETRY#####################################
         delta_left = self.get_forward_tick_delta(left_tick_data, self.old_left_ticks)
         delta_right = self.get_forward_tick_delta(right_tick_data, self.old_right_ticks)
         # print("Left Encoder: \n", left_tick_data, self.old_left_ticks)

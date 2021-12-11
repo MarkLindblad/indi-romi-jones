@@ -1,3 +1,0 @@
-[submodule "src/romi_robots/bleak"]
-	path = src/romi_robots/bleak
-	url = git://github.com/hbldh/bleak

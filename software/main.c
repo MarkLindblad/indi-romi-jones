@@ -197,18 +197,7 @@ int main(int argc, const char *argv[])
     sensors.rightWheelEncoder = 0;
 
     float avgs[5] = {0};
-    
-    // struct packet {
-    //   float stamp;
-    //   float range;
-    //   float angle;
-    //   int leftWheelEncoder;
-    //   int rightWheelEncoder;      
-    // };
-    // struct packet pkt;
-    // pkt.leftWheelEncoder = 0;
-    // pkt.rightWheelEncoder = 0;
-    
+
         while (1) {
             switch (state) {
                 case Scanning:
@@ -227,10 +216,7 @@ int main(int argc, const char *argv[])
                 case Send:
                     ;
                     float point[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
-                    // pkt.stamp = scan.stamp;
-                    // pkt.leftWheelEncoder = sensors.leftWheelEncoder;
-                    // pkt.rightWheelEncoder = sensors.rightWheelEncoder;
-                    
+                  
                     point[0] = scan.stamp;
                     point[3] = sensors.leftWheelEncoder;
                     point[4] = sensors.rightWheelEncoder;
@@ -239,10 +225,6 @@ int main(int argc, const char *argv[])
                             // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
                             point[1] = scan.points[i].range;
                             point[2] = scan.points[i].angle;
-                            // pkt.range = scan.points[i].range;
-                            // pkt.angle = scan.points[i].angle;
-                            // printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", pkt.stamp, pkt.range, pkt.angle,
-                                                                                                        // pkt.leftWheelEncoder, pkt.rightWheelEncoder);
                             
                             printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", point[0], point[1], point[2],
                                                                                                         point[3], point[4]);

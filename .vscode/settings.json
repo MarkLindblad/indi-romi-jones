@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "ydlidar_sdk.h": "c"
-    },
-    "cmake.sourceDirectory": "${workspaceFolder}/software"
-}

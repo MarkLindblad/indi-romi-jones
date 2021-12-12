@@ -36,7 +36,7 @@
 //didn't convert angles on the fly to save time
 void getAvg(LaserFan *scan, float *out){
     memset(out, 0, sizeof(out));
-    out[0] = -1;
+    out[0] = -1.0;
     int temp_cnt[5] = {0};
     for (int i = 0; i < scan->npoints; i++){
         if (-0.523599< scan->points[i].angle && scan->points[i].angle< 0.523599){ //-30 to 30
@@ -45,8 +45,7 @@ void getAvg(LaserFan *scan, float *out){
         } else if (1.0472 < scan->points[i].angle && scan->points[i].angle< 2.0944){ // 60 to 120
             out[2] += scan->points[i].range;
             temp_cnt[2]+=1;
-        } else if (2.61799 < scan->points[i].angle && scan->points[i].angle< 3.14159
-                ||-3.14159 < scan->points[i].angle && scan->points[i].angle< -2.61799 ){ // 150 to 180 or -180 to -150
+        } else if (2.61799 < scan->points[i].angle && scan->points[i].angle< 3.14159 ||-3.14159 < scan->points[i].angle && scan->points[i].angle< -2.61799 ){ // 150 to 180 or -180 to -150
             out[3] += scan->points[i].range;
             temp_cnt[3]+=1;
         } else if (-2.0944 < scan->points[i].angle && scan->points[i].angle< -1.0472){ // -120 to -60
@@ -175,15 +174,15 @@ int main(int argc, const char *argv[]) {
     } state_t;
 
     // 0: S (stop), 1: F (forward), 2: R (right), 3: L (left)
-    typedef enum {
-        S,
-        F,
-        R,
-        L,
-    } direction_t;
+    //typedef enum {
+        //S,
+        //F,
+        //R,
+        //L
+    //} direction_t;
 
     state_t state = Scanning;
-    direction_t direction = S;
+    char direction = 'S';
     printf("started\n");
     
     KobukiSensors_t sensors;
@@ -192,25 +191,14 @@ int main(int argc, const char *argv[]) {
 
     float avgs[5] = {0};
     
-    // struct packet {
-    //   float stamp;
-    //   float range;
-    //   float angle;
-    //   int leftWheelEncoder;
-    //   int rightWheelEncoder;      
-    // };
-    // struct packet pkt;
-    // pkt.leftWheelEncoder = 0;
-    // pkt.rightWheelEncoder = 0;
-    
     while (1) {
         switch (state) {
             case Scanning:
-            // Romi scans the environment using the lidar
+                printf("SCANNING...\n");
+                // Romi scans the environment using the lidar
                 if(ret && os_isOk()) {
                     if(doProcessSimple(laser, &scan)) {
                         kobukiSensorPoll(&sensors);
-                        getAvg(&scan, avgs); 
                         state = Send;
                     }
                 } else {
@@ -220,74 +208,66 @@ int main(int argc, const char *argv[]) {
                 }
                 break;
             case Send: ;
-            // Romi sends lidar and wheel encoder data to central computer
+                printf("SENDING...\n");
+                // Romi sends lidar and wheel encoder data to central computer
                 float sensor_data[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
-                // pkt.stamp = scan.stamp;
-                // pkt.leftWheelEncoder = sensors.leftWheelEncoder;
-                // pkt.rightWheelEncoder = sensors.rightWheelEncoder;
                 
                 sensor_data[0] = scan.stamp;
                 sensor_data[3] = sensors.leftWheelEncoder;
                 sensor_data[4] = sensors.rightWheelEncoder;
                 
                 for (int i = 0; i < scan.npoints; i++) {
-                    // fprintf(stdout, "distance %f angle %.4f\n", scan.points[i].range*100, scan.points[i].angle * 57.29);
                     sensor_data[1] = scan.points[i].range;
                     sensor_data[2] = scan.points[i].angle;
-                    // pkt.range = scan.points[i].range;
-                    // pkt.angle = scan.points[i].angle;
-                    // printf("stamp: %d distance: %.2f angle: %.2f ticks (%u, %u)\n", pkt.stamp, pkt.range, pkt.angle,
-                                                                                                // pkt.leftWheelEncoder, pkt.rightWheelEncoder);
-                    
-                    //printf("stamp: %d", point[3]);
-                    // sprintf (msg, "%.0f, %.0f",scan.points[i].range/10, scan.points[i].angle * 57.29 );
-                    if (SEND) {
-                        if (send(new_socket, sensor_data, 5 * sizeof(float), 0) == -1) {
-                            perror("send failed");
-                            exit(EXIT_FAILURE);
-                        }
+                    if (send(new_socket, sensor_data, 5 * sizeof(float), 0) == -1) {
+                        perror("send failed");
+                        exit(EXIT_FAILURE);
                     }
-                    // send(new_socket, &pkt, sizeof(struct packet), 0 );
-                    fflush(stdout);
                 }
-                //printf("0: %f, 90: %f 180: %f 270: %f\n", avgs[1]*100, avgs[2]*100, avgs[3]*100, avgs[4]*100); 
-                if (SEND) {
-                //    send(new_socket , avgs , 5 * sizeof(float) , 0 );
+                getAvg(&scan, sensor_data);
+                if (send(new_socket, sensor_data, 5 * sizeof(float), 0) == -1) {
+                    perror("send failed");
+                    exit(EXIT_FAILURE);
                 }
+                fflush(stdout);
                 state = Receive;
                 break;
             case Receive: ;
-            // Romi receives a direction from the central computer
-                //TODO receive direction
+                printf("RECEIVING...\n");
+                // Romi receives a direction from the central computer
                 // Pointer to char
-                char* dir;
-                *dir = 'A';
-                if (recv(new_socket, &dir, sizeof(char), 0) == -1) {
-                    perror("receive failed");
-                    exit(EXIT_FAILURE);
-                } else {
+                kobukiDriveDirect(0, 0);
+                char dir[1] = {0};
+                uint8_t size = sizeof(char);
+                if (read(new_socket, dir, size) == size) {
                     printf("Direction: %c \n", *dir);
                     direction = *dir;
                     state = Drive;
                     break;
+                } else {
+                    perror("receive failed");
+                    exit(EXIT_FAILURE);
                 }
 
-            case Drive:
-            // Romi moves in the direction given by the central computer
-                switch(direction) {
-                    case S:
-                        kobukiDriveDirect(0, 0);
-                    case F:
-                        kobukiDriveDirect(75, 75);
-                    case R:
-                        kobukiDriveDirect(75, -75);
-                    case L:
-                        kobukiDriveDirect(-75, 75);
+            case Drive: ;
+                printf("DRIVING...\n");
+                // Romi moves in the direction given by the central computer
+                if (direction == 'S') {
+                    printf("STOP...");
+                    kobukiDriveDirect(0, 0);
+                } else if (direction == 'F') {
+                    printf("FORWARD...\n");
+                    kobukiDriveDirect(75, 75);
+                } else if (direction == 'R') {
+                    printf("RIGHT...");
+                    kobukiDriveDirect(75, -75);
+                } else if (direction == 'L'){
+                    printf("LEFT...");
+                    kobukiDriveDirect(-75, 75);
                 }
                 state = Scanning;
                 break;
                 
-            
             case Close:
                 kobukiDriveDirect(0,0);
                 LaserFanDestroy(&scan);

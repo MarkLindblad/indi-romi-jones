@@ -76,22 +76,22 @@ bool getAvg(LaserFan *scan, float *out){
     int count = 0;
     bool good_range = true;
     for (int i = 0; i < scan->npoints; i++){
-        if (scan->points[i].range > 1.0) {
-            printf("(%f, %f)", scan->points[i].range, scan->points[i].angle);
-        }
-        if (-0.3 < scan->points[i].angle && scan->points[i].angle < 1.2) { // Front
+        //if (scan->points[i].range > 1.0) {
+            //printf("(%f, %f)\n", scan->points[i].range, scan->points[i].angle);
+        //}
+        if (-0.253073 < scan->points[i].angle && scan->points[i].angle < 0.605684) { // Front
             out[1] += scan->points[i].range;
             temp_cnt[1] += 1;
-            if (scan->points[i].range < 1.0) {
+            if (scan->points[i].range < 1.1) {
                 count += 1;
-                if (count > 50) {
+                if (count > 30) {
                     good_range = false;
                 }
             }
-        } else if (1.1 < scan->points[i].angle && scan->points[i].angle < 2.3) { // Left
+        } else if (1.224458 < scan->points[i].angle && scan->points[i].angle < 1.929680) { // RIGHT
             out[2] += scan->points[i].range;
             temp_cnt[2] += 1;
-        } else if (-2.0< scan->points[i].angle && scan->points[i].angle < -1.0) { // Right
+        } else if (-1.838323 < scan->points[i].angle && scan->points[i].angle < -1.057288) { // LEFT
             out[3] += scan->points[i].range;
             temp_cnt[3] += 1;
         }
@@ -224,7 +224,6 @@ int main(int argc, const char *argv[]) {
     state_t state = Stop;
     char direction = 'F';
     printf("started\n");
-    
     KobukiSensors_t sensors;
     struct packet pkt;
     float avgs[5] = {0}; // -1.0, front avg, left avg, right avg, 0
@@ -235,13 +234,22 @@ int main(int argc, const char *argv[]) {
     bool good_range = true;
     
     // Drive Straight State Variables
-    int16_t offset = 5;
+    int16_t offset = 10;
     uint8_t prevLeftEncoder = 0;
     uint8_t prevRightEncoder = 0;
     uint8_t leftDiff = 0;
     uint8_t rightDiff = 0;
     int16_t rightVel = 100;
     int16_t leftVel = 100;
+    
+    // Turn State Variables
+    uint32_t ticks = radiansToEncoderTicks((90/180.0)*M_PI);
+    uint32_t left = 0; // Number of Encoder ticks accumulated by the left wheel
+    uint32_t right = 0; // Number of Encoder ticks accumulated by the right wheel
+    uint32_t current_left = 0;
+    uint32_t current_right = 0;
+    uint32_t last_left = 0;
+    uint32_t last_right = 0;
     
     while (1) {
         kobukiSensorPoll(&sensors);
@@ -252,7 +260,6 @@ int main(int argc, const char *argv[]) {
                 kobukiDriveDirect(0, 0);
                 sensors.leftWheelEncoder = 0;
                 sensors.rightWheelEncoder = 0;
-                kobukiSensorPoll(&sensors);
                 if (read(new_socket, dir, buf_size) == buf_size) {
                     printf("Received: %c", *dir);
                     state = Scanning;
@@ -283,7 +290,7 @@ int main(int argc, const char *argv[]) {
                 pkt.left_encoder_ticks = sensors.leftWheelEncoder; // sensor_data[3] = sensors.leftWheelEncoder;
                 pkt.right_encoder_ticks = sensors.rightWheelEncoder; // sensor_data[4] = sensors.rightWheelEncoder;
                 // printf("(%d, %d, %d)\n", sensor_data[3], sensor_data[4], sizeof(sensors.leftWheelEncoder));
-                printf("(%d, %d, %d)\n", pkt.left_encoder_ticks, pkt.right_encoder_ticks, sizeof(sensors.leftWheelEncoder));
+                //printf("(%d, %d, %d)\n", pkt.left_encoder_ticks, pkt.right_encoder_ticks, sizeof(sensors.leftWheelEncoder));
                 
                 for (int i = 0; i < scan.npoints; i++) {
                     pkt.distance = scan.points[i].range; // sensor_data[1] = scan.points[i].range;
@@ -370,16 +377,15 @@ int main(int argc, const char *argv[]) {
                 // Romi turns until the front range becomes large
                 if (direction == 'R') {
                     printf("TURNING RIGHT...\n");
-                    uint32_t ticks = radiansToEncoderTicks(90/180.0*M_PI);
                     kobukiSensorPoll(&sensors);
-                    uint32_t left = 0; // Number of Encoder ticks accumulated by the left wheel
-                    uint32_t right = 0; // Number of Encoder ticks accumulated by the right wheel
-                    uint32_t current_left = sensors.leftWheelEncoder;
-                    uint32_t current_right = sensors.rightWheelEncoder;
-                    uint32_t last_left = sensors.leftWheelEncoder;
-                    uint32_t last_right = sensors.rightWheelEncoder;
+                    left = 0; // Number of Encoder ticks accumulated by the left wheel
+                    right = 0; // Number of Encoder ticks accumulated by the right wheel
+                    current_left = sensors.leftWheelEncoder;
+                    current_right = sensors.rightWheelEncoder;
+                    last_left = sensors.leftWheelEncoder;
+                    last_right = sensors.rightWheelEncoder;
                     while (left  < ticks) {
-                        printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
+                        //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
                         kobukiDriveDirect(150, -150);
                         current_left = sensors.leftWheelEncoder;
                         current_right = sensors.rightWheelEncoder;
@@ -389,19 +395,19 @@ int main(int argc, const char *argv[]) {
                         last_right = current_right;
                         kobukiSensorPoll(&sensors);
                     }
-                    printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
-                } else if (direction == 'L'){
+                    //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
+                } else if (direction == 'L') {
                     printf("TURNING LEFT...\n");
-                    uint32_t ticks = radiansToEncoderTicks(90/180.0*M_PI);
+                    
                     kobukiSensorPoll(&sensors);
-                    uint32_t left = 0; // Number of Encoder ticks accumulated by the left wheel
-                    uint32_t right = 0; // Number of Encoder ticks accumulated by the right wheel
-                    uint32_t current_left = sensors.leftWheelEncoder;
-                    uint32_t current_right = sensors.rightWheelEncoder;
-                    uint32_t last_left = sensors.leftWheelEncoder;
-                    uint32_t last_right = sensors.rightWheelEncoder;
+                    left = 0; // Number of Encoder ticks accumulated by the left wheel
+                    right = 0; // Number of Encoder ticks accumulated by the right wheel
+                    current_left = sensors.leftWheelEncoder;
+                    current_right = sensors.rightWheelEncoder;
+                    last_left = sensors.leftWheelEncoder;
+                    last_right = sensors.rightWheelEncoder;
                     while (left + right < 2 * ticks) {
-                        printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
+                        //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
                         kobukiDriveDirect(-150, 150);
                         current_left = sensors.leftWheelEncoder;
                         current_right = sensors.rightWheelEncoder;
@@ -411,13 +417,12 @@ int main(int argc, const char *argv[]) {
                         last_right = current_right;
                         kobukiSensorPoll(&sensors);
                     }
-                    printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
+                    //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
                 }
-                // sensors.leftWheelEncoder = 0;
-                // sensors.rightWheelEncoder = 0;
                 good_range = true;
                 state = Drive;
                 break;
+                
             case Close:
                 kobukiDriveDirect(0,0);
                 LaserFanDestroy(&scan);

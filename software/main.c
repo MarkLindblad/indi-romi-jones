@@ -104,6 +104,7 @@ bool getAvg(LaserFan *scan, float *out){
 
 
 int main(int argc, const char *argv[]) {   
+    kobukiDriveDirect(0, 0);
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int opt = 1;
@@ -264,6 +265,7 @@ int main(int argc, const char *argv[]) {
                     printf("Received: %c", *dir);
                     state = Scanning;
                 } else {
+                    kobukiDriveDirect(0, 0);
                     perror("receive failed");
                     exit(EXIT_FAILURE);
                 }
@@ -297,6 +299,7 @@ int main(int argc, const char *argv[]) {
                     pkt.angle = scan.points[i].angle; // sensor_data[2] = scan.points[i].angle;
                     // if (send(new_socket, sensor_data, 5 * sizeof(float), 0) == -1) {
                     if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                        kobukiDriveDirect(0, 0);
                         perror("send failed");
                         exit(EXIT_FAILURE);
                     }
@@ -305,6 +308,7 @@ int main(int argc, const char *argv[]) {
                 // sensor_data[0] = -1.0;
                 pkt.timestamp = -1.0;
                 if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                    kobukiDriveDirect(0, 0);
                     perror("send failed");
                     exit(EXIT_FAILURE);
                 }
@@ -313,6 +317,7 @@ int main(int argc, const char *argv[]) {
                     // sensor_data[0] = -2.0;
                     pkt.timestamp = -2.0;
                     if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                        kobukiDriveDirect(0, 0);
                         perror("send failed");
                         exit(EXIT_FAILURE);
                     }
@@ -328,6 +333,7 @@ int main(int argc, const char *argv[]) {
                 if (!good_range) {
                     kobukiDriveDirect(0, 0);
                     if (send(new_socket, avgs, 5 * sizeof(float), 0) == -1) {
+                        kobukiDriveDirect(0, 0);
                         perror("send failed");
                         exit(EXIT_FAILURE);
                     }
@@ -348,6 +354,7 @@ int main(int argc, const char *argv[]) {
                     state = Turn;
                     break;
                 } else {
+                    kobukiDriveDirect(0, 0);
                     perror("receive failed");
                     exit(EXIT_FAILURE);
                 }

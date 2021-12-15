@@ -1,4 +1,5 @@
 from enum import Enum
+from inspect import ismodule
 
 # The FSM model of Romi can be described using two separate state machines
 # working in sync, with each state in the physical romi interacting with a 
@@ -12,6 +13,8 @@ from enum import Enum
 #         Close        ------>        Close
 
 class State(Enum):
-    Receive = 0
-    Send = 1
-    Close = 2
+    Idle = 0
+    Initialize = 1
+    Receive = 2
+    Send = 3
+    Close = 4

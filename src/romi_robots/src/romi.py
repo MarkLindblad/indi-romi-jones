@@ -21,8 +21,8 @@ import struct
 # Port on which you want to connect
 _PORT = 8080
 # IP Address
-#_IP_ADDRESS = '172.20.10.6' # William's IP
-_IP_ADDRESS = '192.168.137.22' # Mark's IP
+_IP_ADDRESS = '172.20.10.6' # William's IP
+#_IP_ADDRESS = '192.168.137.22' # Mark's IP
 # socket object
 _SOCKET = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #########################################################################

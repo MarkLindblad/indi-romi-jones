@@ -14,7 +14,7 @@ from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import String
 
-class PathPlanner(object):
+class PathPlanner():
     """
     Path Planning Functionality for Baxter/Sawyer
 
@@ -33,28 +33,24 @@ class PathPlanner(object):
     """
     def __init__(self, romi_name):
         self.name = romi_name
-        rospy.Subscriber('pose', Pose, self.pose_callback)
-        rospy.Subscriber('avg_scan', LaserScan, self.laser_callback)
-        self.direction_pub = rospy.Publisher('direction', String, queue_size=10)
 
         self.x = 0
         self.y = 0
+        self.direction = ""
         self.avg_ranges = []
 
     def pose_callback(self, msg):
-        pose = msg.data
+        pose = msg
         self.x = pose.position.x
         self.y = pose.position.y
     
     def laser_callback(self, msg):
-        self.avg_ranges = msg.data.ranges
+        for range in msg.ranges:
+            self.avg_ranges.append(range)
 
     def direction_to_pose(self):
         """
         Generates a direction given a pose with respect to a fixed frame subject to lidar range contraints
         """
-        if 0.5 in self.avg_ranges:
-            self.direction_pub.publish("Right")
-        else:
-            self.direction_pub.publish("Forward")
+        self.direction = "Forward"
 

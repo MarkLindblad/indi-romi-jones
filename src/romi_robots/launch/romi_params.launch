@@ -12,4 +12,7 @@
   <!-- <node name="romi2" pkg="romi_robots" type="romi.py" output="screen" args="romi2"/>
   <node name="romi3" pkg="romi_robots" type="romi.py" output="screen" args="romi3"/> -->
 
+  <!--Launch Mapping Package-->
+  <include file="$(find mapping)/launch/demo.launch"/>
+
 </launch>

@@ -41,6 +41,45 @@ class OccupancyGrid2d(object):
         # Set up the map.
         self._map = np.zeros((self._x_num, self._y_num))
 
+        # m = Marker()
+        # m.header.stamp = rospy.Time.now()
+        # m.header.frame_id = self._fixed_frame
+        # m.ns = "map"
+        # m.id = 0
+        # m.type = Marker.CUBE_LIST
+        # m.action = Marker.ADD
+        # m.scale.x = self._x_res
+        # m.scale.y = self._y_res
+        # m.scale.z = 0.01
+        # # Initial Pose
+        # point = Point()
+        # point.x = 0.0
+        # point.y = 0.0
+        # point.z = 0.0
+
+        # quat = Quaternion()
+        # quat.x = 0
+        # quat.y = 0
+        # quat.z = 0
+        # quat.w = 0
+
+        # pose = Pose()
+        # pose.position = point
+        # pose.orientation = quat
+        # m.pose = pose
+        # #m.lifetime = 0
+        # m.frame_locked = True
+
+        # for ii in range(self._x_num):
+        #     for jj in range(self._y_num):
+        #         p = Point(0.0, 0.0, 0.0)
+        #         (p.x, p.y) = self.VoxelCenter(ii, jj)
+
+        #         m.points.append(p)
+        #         m.colors.append(self.Colormap(ii, jj))
+
+        # self._vis_pub.publish(m)
+
         self._initialized = True
         return True
 
@@ -153,6 +192,9 @@ class OccupancyGrid2d(object):
         # Publishes Pose data for path_planner.py
         self._pose_pub = rospy.Publisher("pose", Pose, queue_size=10)
 
+        # Publishes Filtered scan for path planner
+        self._filter_pub = rospy.Publisher("filtered_scan", LaserScan, queue_size=1)
+
         return True
 
     # Callback to process sensor measurements.
@@ -186,6 +228,7 @@ class OccupancyGrid2d(object):
         if abs(roll) > 0.1 or abs(pitch) > 0.1:
             rospy.logwarn("%s: Turtlebot roll/pitch is too large.", self._name)
 
+        ranges = []
         # Loop over all ranges in the LaserScan.
         for idx, r in enumerate(msg.ranges):
             # Randomly throw out some rays to speed this up.
@@ -208,13 +251,14 @@ class OccupancyGrid2d(object):
                 rospy.logwarn("%s: Range %f < %f was too small.",
                               self._name, r, msg.range_min)
                 continue
-
+            
+            ranges.append(r)
             # Walk along this ray from the scan point to the sensor.
             # Update log-odds at each voxel along the way.
             # Only update each voxel once. 
             # The occupancy grid is stored in self._map
-            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 50)
-            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 50)
+            y_vals = np.linspace(sensor_y, sensor_y + r*np.sin(angle_fixed_frame), 100)
+            x_vals = np.linspace(sensor_x, sensor_x + r*np.cos(angle_fixed_frame), 100)
 
             curr_voxel = ()
             for i in range(len(x_vals)):
@@ -233,7 +277,37 @@ class OccupancyGrid2d(object):
                 
         # Visualize.
         self.Visualize()
-        self._pose_pub(Pose(Point(sensor_x, sensor_y, 0), Quaternion(0, 0, 0, 0)))
+
+        # Publish pose
+        point = Point()
+        point.x = sensor_x
+        point.y = sensor_y
+        point.z = 0.0
+
+        quat = Quaternion()
+        quat.x = 0
+        quat.y = 0
+        quat.z = 0
+        quat.w = 0
+
+        pose = Pose()
+        pose.position = point
+        pose.orientation = quat
+        self._pose_pub.publish(pose)
+
+        # avg_scan = LaserScan()
+        # avg_scan.header.stamp = rospy.Time.now()
+        # avg_scan.header.frame_id = 'laser_frame'
+        # avg_scan.angle_min = 0
+        # avg_scan.angle_max = 0
+        # avg_scan.angle_increment = 0
+        # avg_scan.time_increment = 0
+        # avg_scan.scan_time = 0
+        # avg_scan.range_min = 0
+        # avg_scan.range_max = 0
+        # avg_scan.ranges = ranges
+        # avg_scan.intensities = []
+        # self._filter_pub.publish(avg_scan)
 
     # Convert (x, y) coordinates in fixed frame to grid coordinates.
     def PointToVoxel(self, x, y):
@@ -282,7 +356,7 @@ class OccupancyGrid2d(object):
         m.scale.x = self._x_res
         m.scale.y = self._y_res
         m.scale.z = 0.01
-        m.lifetime = 0
+        #m.lifetime = 0
         m.frame_locked = True
 
         for ii in range(self._x_num):

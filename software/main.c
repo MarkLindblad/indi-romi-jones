@@ -26,11 +26,12 @@
 
 #include "kobuki.h"
 
-#define SPEED 20
-#define SEND true
+#define SPEED 100
+#define ONLINE false
 
-#define WHEEL_ENCODER_TICKS_PER_ROTATION 370
-#define WHEEL_TRACK_IN_METERS 0.149
+// #define WHEEL_ENCODER_TICKS_PER_ROTATION 370
+#define WHEEL_ENCODER_TICKS_PER_ROTATION 1440
+#define WHEEL_TRACK_IN_METERS 0.145
 #define WHEEL_RADIUS_IN_METERS 0.036
 #define DIST_TO_ENCODER_TICKS_CONSTANT WHEEL_ENCODER_TICKS_PER_ROTATION * WHEEL_TRACK_IN_METERS / (2 * M_PI * WHEEL_RADIUS_IN_METERS)
 #define WHEEL_TRACK_CIRCUMFERENCE M_PI * WHEEL_TRACK_IN_METERS
@@ -46,13 +47,19 @@ struct packet {
 
 //float sensor_data[5] = {0}; // timestamp, distance, angle, ticks left, ticks right
 
-uint32_t radiansToEncoderTicks(float theta) {
-    return theta / (TWO_PI) * WHEEL_TRACK_CIRCUMFERENCE * DIST_TO_ENCODER_TICKS_CONSTANT;
+// theta in deg
+int DegToEncoderTicks(float theta) {
+    // // conversion from encoder ticks to meters
+    // const float CONVERSION = 0.0006108;
+    const float m_to_ticks = 1637.19711853; // [ticks/m]
+    float dist =  (theta / 360.0) * WHEEL_TRACK_CIRCUMFERENCE;
+    printf("arc length = %f", dist);
+    return floorf(dist * m_to_ticks);
 }
 
 uint16_t getForwardEncoderTickDelta(uint16_t new_tick, uint16_t old_tick) {
     if (new_tick < old_tick) {
-        return (1 << 16) - old_tick + new_tick;
+        return (0xFFFF) - old_tick + new_tick;
     } else {
         return new_tick - old_tick;
     }
@@ -62,8 +69,11 @@ uint16_t getBackwardEncoderTickDelta(uint16_t new_tick, uint16_t old_tick) {
     if (old_tick < new_tick) {
         return old_tick - new_tick;
     } else {
-        return (1 << 16) - new_tick + old_tick;
+        return (0xFFFF) - new_tick + old_tick;
     }
+}
+float deg_to_rad(int deg){
+    return deg * 0.01745329252;
 }
 
 // get the avg distance in 4 directions, out => [-1, 0, 90, 180, 270] 
@@ -73,33 +83,49 @@ bool getAvg(LaserFan *scan, float *out){
     memset(out, 0, sizeof(out));
     out[0] = -1.0;
     int temp_cnt[5] = {0};
-    int count = 0;
-    bool good_range = true;
     for (int i = 0; i < scan->npoints; i++){
-        //if (scan->points[i].range > 1.0) {
-            //printf("(%f, %f)\n", scan->points[i].range, scan->points[i].angle);
-        //}
-        if (-0.253073 < scan->points[i].angle && scan->points[i].angle < 0.605684) { // Front
+        if ( -0.174533 < scan->points[i].angle && scan->points[i].angle < 0.174533) { // Back
             out[1] += scan->points[i].range;
             temp_cnt[1] += 1;
-            if (scan->points[i].range < 1.1) {
-                count += 1;
-                if (count > 30) {
-                    good_range = false;
-                }
-            }
-        } else if (1.224458 < scan->points[i].angle && scan->points[i].angle < 1.929680) { // RIGHT
+        } else if (1.39626 < scan->points[i].angle && scan->points[i].angle < 1.74533) { //RIGHT
             out[2] += scan->points[i].range;
             temp_cnt[2] += 1;
-        } else if (-1.838323 < scan->points[i].angle && scan->points[i].angle < -1.057288) { // LEFT
+        } else if (2.96706 < scan->points[i].angle && scan->points[i].angle <3.14159
+                || -3.14159 < scan->points[i].angle && scan->points[i].angle< -2.96706) { //Front
             out[3] += scan->points[i].range;
             temp_cnt[3] += 1;
+        } else if (-1.74533 < scan->points[i].angle && scan->points[i].angle< -1.39626 ){ // LEFT
+            out[4] += scan->points[i].range;
+            temp_cnt[4]+=1;
         }
     }
     for (int i = 1; i < 4; i++){
         out[i] = out[i] / temp_cnt[i];
     }
-    return good_range;
+    // memset(out, 0, sizeof(out));
+    // out[0] = -1;
+    // int temp_cnt[5] = {0};
+    // for (int i = 0; i < scan->npoints; i++){
+    //     if (-0.523599< scan->points[i].angle && scan->points[i].angle< 0.523599){ //-30 to 30
+    //         out[1] += scan->points[i].range;
+    //         temp_cnt[1]+=1;
+    //     } else if (1.0472 < scan->points[i].angle && scan->points[i].angle< 2.0944){ // 60 to 120
+    //         out[2] += scan->points[i].range;
+    //         temp_cnt[2]+=1;
+    //     } else if (2.61799 < scan->points[i].angle && scan->points[i].angle< 3.14159
+    //             ||-3.14159 < scan->points[i].angle && scan->points[i].angle< -2.61799 ){ // 150 to 180 or -180 to -150
+    //         out[3] += scan->points[i].range;
+    //         temp_cnt[3]+=1;
+    //     } else if (-2.0944 < scan->points[i].angle && scan->points[i].angle< -1.0472){ // -120 to -60
+    //         out[4] += scan->points[i].range;
+    //         temp_cnt[4]+=1;
+    //     }
+    // }
+    // for (int i = 1; i <5; i++){
+    //     out[i] = out[i] / temp_cnt[i];
+    // }
+    printf("front range : %f/n", out[1]);
+    return out[1] > 1; 
 }
 
 
@@ -109,7 +135,7 @@ int main(int argc, const char *argv[]) {
     struct sockaddr_in address;
     int opt = 1;
     int addrlen = sizeof(address);
-    if (SEND) {
+    if (ONLINE) {
         //--------------socket------------------------
         // perror("started");
         // Creating socket file descriptor
@@ -214,17 +240,19 @@ int main(int argc, const char *argv[]) {
     typedef enum {
         Stop,
         Scanning,
-        Send,
+        Send_scan,
+        Send_avg,
         Check,
         Receive,
+        Choose_dir,
         Drive,
         Turn,
         Close
     } state_t;
 
-    state_t state = Stop;
     char direction = 'F';
-    printf("started\n");
+
+    printf("------------started-----------------\n");
     KobukiSensors_t sensors;
     struct packet pkt;
     float avgs[5] = {0}; // -1.0, front avg, left avg, right avg, 0
@@ -236,25 +264,24 @@ int main(int argc, const char *argv[]) {
     
     // Drive Straight State Variables
     int16_t offset = 10;
-    uint8_t prevLeftEncoder = 0;
-    uint8_t prevRightEncoder = 0;
+    uint16_t prevLeftEncoder = 0;
+    uint16_t prevRightEncoder = 0;
     uint8_t leftDiff = 0;
     uint8_t rightDiff = 0;
     int16_t rightVel = 100;
     int16_t leftVel = 100;
     
     // Turn State Variables
-    uint32_t ticks = radiansToEncoderTicks((90/180.0)*M_PI);
+    int ticks = DegToEncoderTicks(90.0);
     uint32_t left = 0; // Number of Encoder ticks accumulated by the left wheel
     uint32_t right = 0; // Number of Encoder ticks accumulated by the right wheel
     uint32_t current_left = 0;
     uint32_t current_right = 0;
     uint32_t last_left = 0;
     uint32_t last_right = 0;
-    
-    bool turned = false; 
+        
+    state_t state = Scanning;
     while (1) {
-        kobukiSensorPoll(&sensors);
         switch (state) {
             case Stop:
                 // Initial state of romi.
@@ -277,7 +304,9 @@ int main(int argc, const char *argv[]) {
                 printf("SCANNING...\n");
                 if(ret && os_isOk()) {
                     if(doProcessSimple(laser, &scan)) {
-                        state = Send;
+                        kobukiSensorPoll(&sensors);
+                        good_range = getAvg(&scan, avgs);
+                        state = Send_scan;
                     }
                 } else {
                     fprintf(stderr, "Failed to get Lidar Data\n");
@@ -286,142 +315,153 @@ int main(int argc, const char *argv[]) {
                 }
                 break;
 
-            case Send: ;
-                printf("SENDING...\n");
-                // Romi sends lidar and wheel encoder data to command
-                pkt.timestamp = scan.stamp; // sensor_data[0] = scan.stamp;
-                pkt.left_encoder_ticks = sensors.leftWheelEncoder; // sensor_data[3] = sensors.leftWheelEncoder;
-                pkt.right_encoder_ticks = sensors.rightWheelEncoder; // sensor_data[4] = sensors.rightWheelEncoder;
-                // printf("(%d, %d, %d)\n", sensor_data[3], sensor_data[4], sizeof(sensors.leftWheelEncoder));
-                //printf("(%d, %d, %d)\n", pkt.left_encoder_ticks, pkt.right_encoder_ticks, sizeof(sensors.leftWheelEncoder));
-                
-                for (int i = 0; i < scan.npoints; i++) {
-                    pkt.distance = scan.points[i].range; // sensor_data[1] = scan.points[i].range;
-                    pkt.angle = scan.points[i].angle; // sensor_data[2] = scan.points[i].angle;
-                    // if (send(new_socket, sensor_data, 5 * sizeof(float), 0) == -1) {
+            case Send_scan: ;
+                if (ONLINE){
+                    printf("SENDING...\n");
+                    // Romi sends lidar and wheel encoder data to command
+                    pkt.timestamp = scan.stamp; // sensor_data[0] = scan.stamp;
+                    pkt.left_encoder_ticks = sensors.leftWheelEncoder; // sensor_data[3] = sensors.leftWheelEncoder;
+                    pkt.right_encoder_ticks = sensors.rightWheelEncoder; // sensor_data[4] = sensors.rightWheelEncoder;
+                    // printf("(%d, %d, %d)\n", sensor_data[3], sensor_data[4], sizeof(sensors.leftWheelEncoder));
+                    //printf("(%d, %d, %d)\n", pkt.left_encoder_ticks, pkt.right_encoder_ticks, sizeof(sensors.leftWheelEncoder));
+                    
+                    for (int i = 0; i < scan.npoints; i++) {
+                        pkt.distance = scan.points[i].range; // sensor_data[1] = scan.points[i].range;
+                        pkt.angle = scan.points[i].angle; // sensor_data[2] = scan.points[i].angle;
+                        // if (send(new_socket, sensor_data, 5 * sizeof(float), 0) == -1) {
+                        if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                            kobukiDriveDirect(0, 0);
+                            perror("send failed");
+                            exit(EXIT_FAILURE);
+                        }
+                    }
+                }    
+                state = Send_avg;
+                break;
+
+            case Send_avg:
+                if (ONLINE){
+                    // Notify command that all sensor data has been sent and to publish data
+                    // sensor_data[0] = -1.0;
+                    pkt.timestamp = -1.0;
                     if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
                         kobukiDriveDirect(0, 0);
                         perror("send failed");
                         exit(EXIT_FAILURE);
                     }
                 }
-                // Notify command that all sensor data has been sent and to publish data
-                // sensor_data[0] = -1.0;
-                pkt.timestamp = -1.0;
-                if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
-                    kobukiDriveDirect(0, 0);
-                    perror("send failed");
-                    exit(EXIT_FAILURE);
-                }
-                good_range = getAvg(&scan, avgs);
-                if (!good_range) {
-                    // sensor_data[0] = -2.0;
-                    pkt.timestamp = -2.0;
-                    if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
-                        kobukiDriveDirect(0, 0);
-                        perror("send failed");
-                        exit(EXIT_FAILURE);
-                    }
-                }
-                fflush(stdout);
-                // Only go to driving state if front range is good
+                // if (!good_range) {
+                //     // sensor_data[0] = -2.0;
+                //     pkt.timestamp = -2.0;
+                //     if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                //         kobukiDriveDirect(0, 0);
+                //         perror("send failed");
+                //         exit(EXIT_FAILURE);
+                //     }
+                // }
+                // // Only go to driving state if front range is good
                 state = Check;
                 break;
                 
-            case Check: ;
+            case Check: 
+
                 printf("CHECKING FRONT RANGE...\n");
                 // Romi checks if the front range is larger than 1.0
+                // good_range = getAvg(&scan, avgs);
                 if (!good_range) {
+                    printf("--------WALL----------\n");
                     kobukiDriveDirect(0, 0);
-                    if (send(new_socket, avgs, 5 * sizeof(float), 0) == -1) {
-                        kobukiDriveDirect(0, 0);
-                        perror("send failed");
-                        exit(EXIT_FAILURE);
+                    if (ONLINE){
+                        printf("------sending avg-----\n");
+                        pkt.timestamp = -2.0; // send signal that I need a direction
+                        if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                            kobukiDriveDirect(0, 0);
+                            perror("send failed");
+                            exit(EXIT_FAILURE);
+                        }
+                        fflush(stdout);
+                        state = Receive;
+                    } else {
+                        state = Choose_dir;
                     }
-                    fflush(stdout);
-                    state = Receive;
             
                 } else {
                     state = Drive;
                 }
                 break;
                 
-            case Receive: ;
+            case Receive:
                 printf("RECEIVING...\n");
                 // Romi receives a direction from command
                 if (read(new_socket, dir, buf_size) == buf_size) {
                     printf("Direction: %c \n", *dir);
                     direction = *dir;
                     state = Turn;
-                    break;
+                    
                 } else {
                     kobukiDriveDirect(0, 0);
                     perror("receive failed");
                     exit(EXIT_FAILURE);
                 }
+                break;
+            case Choose_dir:
+                printf("-------choosing Direction---------\n");
+                // go to longest distance
+                // avgs = [-1, 0, 90, 180, 270] 
+                direction = avgs[2] > avgs[4] ? 'L' : 'R';
+                state = Turn;
+                break;
 
-            case Drive: ;
+            case Drive:
                 printf("DRIVING FORWARD...\n");
-                leftDiff = sensors.leftWheelEncoder - prevLeftEncoder;
-                rightDiff = sensors.rightWheelEncoder - prevRightEncoder;
+                // leftDiff = sensors.leftWheelEncoder - prevLeftEncoder;
+                // rightDiff = sensors.rightWheelEncoder - prevRightEncoder;
                 
-                prevLeftEncoder = sensors.leftWheelEncoder;
-                prevRightEncoder = sensors.rightWheelEncoder;
+                // prevLeftEncoder = sensors.leftWheelEncoder;
+                // prevRightEncoder = sensors.rightWheelEncoder;
                 
                 
-                if (leftDiff > rightDiff) {
-                    rightVel = 150 + offset;
-                    leftVel = 150 - offset;
-                } else if (rightDiff > leftDiff) {
-                    rightVel = 150 - offset;
-                    leftVel = 150 + offset;
-                }
+                // if (leftDiff > rightDiff) {
+                //     rightVel = 150 + offset;
+                //     leftVel = 150 - offset;
+                // } else if (rightDiff > leftDiff) {
+                //     rightVel = 150 - offset;
+                //     leftVel = 150 + offset;
+                // }
                 
-                kobukiDriveDirect(leftVel, rightVel);
+                //kobukiDriveDirect(leftVel, rightVel);
+                kobukiDriveDirect(SPEED, SPEED + 10);
                 state = Scanning;
                 break;
             
-            case Turn: ;
+            case Turn: 
                 // Romi turns until the front range becomes large
                 if (direction == 'R') {
                     printf("TURNING RIGHT...\n");
                     kobukiSensorPoll(&sensors);
                     left = 0; // Number of Encoder ticks accumulated by the left wheel
-                    right = 0; // Number of Encoder ticks accumulated by the right wheel
                     current_left = sensors.leftWheelEncoder;
-                    current_right = sensors.rightWheelEncoder;
                     last_left = sensors.leftWheelEncoder;
-                    last_right = sensors.rightWheelEncoder;
                     while (left  < ticks) {
                         //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
-                        kobukiDriveDirect(100, -100);
+                        kobukiDriveDirect(SPEED, -SPEED);
                         current_left = sensors.leftWheelEncoder;
-                        current_right = sensors.rightWheelEncoder;
                         left += getForwardEncoderTickDelta(current_left, last_left);
-                        right += getBackwardEncoderTickDelta(current_right, last_right);
                         last_left = current_left;
-                        last_right = current_right;
                         kobukiSensorPoll(&sensors);
                     }
                     //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
                 } else if (direction == 'L') {
                     printf("TURNING LEFT...\n");
-                    
                     kobukiSensorPoll(&sensors);
-                    left = 0; // Number of Encoder ticks accumulated by the left wheel
                     right = 0; // Number of Encoder ticks accumulated by the right wheel
-                    current_left = sensors.leftWheelEncoder;
                     current_right = sensors.rightWheelEncoder;
-                    last_left = sensors.leftWheelEncoder;
                     last_right = sensors.rightWheelEncoder;
-                    while (left + right < 2 * ticks) {
+                    while (right  < ticks) {
                         //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
-                        kobukiDriveDirect(-100, 100);
-                        current_left = sensors.leftWheelEncoder;
+                        kobukiDriveDirect(-SPEED, SPEED);
                         current_right = sensors.rightWheelEncoder;
-                        left += getBackwardEncoderTickDelta(current_left, last_left);
                         right += getForwardEncoderTickDelta(current_right, last_right);
-                        last_left = current_left;
                         last_right = current_right;
                         kobukiSensorPoll(&sensors);
                     }

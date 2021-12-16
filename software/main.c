@@ -52,7 +52,7 @@ uint32_t radiansToEncoderTicks(float theta) {
 
 uint16_t getForwardEncoderTickDelta(uint16_t new_tick, uint16_t old_tick) {
     if (new_tick < old_tick) {
-        return (1 << 17) - old_tick + new_tick;
+        return (1 << 16) - old_tick + new_tick;
     } else {
         return new_tick - old_tick;
     }
@@ -62,7 +62,7 @@ uint16_t getBackwardEncoderTickDelta(uint16_t new_tick, uint16_t old_tick) {
     if (old_tick < new_tick) {
         return old_tick - new_tick;
     } else {
-        return (1 << 17) - new_tick + old_tick;
+        return (1 << 16) - new_tick + old_tick;
     }
 }
 
@@ -252,6 +252,7 @@ int main(int argc, const char *argv[]) {
     uint32_t last_left = 0;
     uint32_t last_right = 0;
     
+    bool turned = false; 
     while (1) {
         kobukiSensorPoll(&sensors);
         switch (state) {
@@ -393,7 +394,7 @@ int main(int argc, const char *argv[]) {
                     last_right = sensors.rightWheelEncoder;
                     while (left  < ticks) {
                         //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
-                        kobukiDriveDirect(150, -150);
+                        kobukiDriveDirect(100, -100);
                         current_left = sensors.leftWheelEncoder;
                         current_right = sensors.rightWheelEncoder;
                         left += getForwardEncoderTickDelta(current_left, last_left);
@@ -415,7 +416,7 @@ int main(int argc, const char *argv[]) {
                     last_right = sensors.rightWheelEncoder;
                     while (left + right < 2 * ticks) {
                         //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
-                        kobukiDriveDirect(-150, 150);
+                        kobukiDriveDirect(-100, 100);
                         current_left = sensors.leftWheelEncoder;
                         current_right = sensors.rightWheelEncoder;
                         left += getBackwardEncoderTickDelta(current_left, last_left);

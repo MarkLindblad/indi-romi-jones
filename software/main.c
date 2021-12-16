@@ -243,7 +243,7 @@ int main(int argc, const char *argv[]) {
     int16_t leftVel = 100;
     
     // Turn State Variables
-    uint32_t ticks =radiansToEncoderTicks((90/180.0)*M_PI);
+    uint32_t ticks = radiansToEncoderTicks((90/180.0)*M_PI);
     uint32_t left = 0; // Number of Encoder ticks accumulated by the left wheel
     uint32_t right = 0; // Number of Encoder ticks accumulated by the right wheel
     uint32_t current_left = 0;

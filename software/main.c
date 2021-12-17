@@ -26,9 +26,9 @@
 
 #include "kobuki.h"
 
-#define SPEED 100
+#define SPEED 110
 #define ONLINE false
-
+#define GOOD_RANGE  0.85
 // #define WHEEL_ENCODER_TICKS_PER_ROTATION 370
 #define WHEEL_ENCODER_TICKS_PER_ROTATION 1440
 #define WHEEL_TRACK_IN_METERS 0.145
@@ -80,52 +80,48 @@ float deg_to_rad(int deg){
 //angles are in radian and range from -180 to 180
 //didn't convert angles on the fly to save time
 bool getAvg(LaserFan *scan, float *out){
-    memset(out, 0, sizeof(out));
+    memset(out, 0, 5 * sizeof(float));
     out[0] = -1.0;
     int temp_cnt[5] = {0};
     for (int i = 0; i < scan->npoints; i++){
-        if ( -0.174533 < scan->points[i].angle && scan->points[i].angle < 0.174533) { // Back
-            out[1] += scan->points[i].range;
-            temp_cnt[1] += 1;
-        } else if (1.39626 < scan->points[i].angle && scan->points[i].angle < 1.74533) { //RIGHT
-            out[2] += scan->points[i].range;
-            temp_cnt[2] += 1;
-        } else if (2.96706 < scan->points[i].angle && scan->points[i].angle <3.14159
-                || -3.14159 < scan->points[i].angle && scan->points[i].angle< -2.96706) { //Front
-            out[3] += scan->points[i].range;
-            temp_cnt[3] += 1;
-        } else if (-1.74533 < scan->points[i].angle && scan->points[i].angle< -1.39626 ){ // LEFT
-            out[4] += scan->points[i].range;
-            temp_cnt[4]+=1;
+        if (scan->points[i].range > 0){
+            if ( deg_to_rad(-5) <= scan->points[i].angle && scan->points[i].angle <= deg_to_rad(5)) { //FRONT
+                out[1] += scan->points[i].range;
+                temp_cnt[1] += 1;
+            } else if (deg_to_rad(85) <= scan->points[i].angle && scan->points[i].angle <= deg_to_rad(95)) { //RIGHT
+                out[2] += scan->points[i].range;
+                temp_cnt[2] += 1;
+            } else if (deg_to_rad(175) <= scan->points[i].angle && scan->points[i].angle <= deg_to_rad(180)
+                    || deg_to_rad(-180) < scan->points[i].angle && scan->points[i].angle <= deg_to_rad(-175)) { //BACK
+                out[3] += scan->points[i].range;
+                temp_cnt[3] += 1;
+            } else if (deg_to_rad(-95) <= scan->points[i].angle && scan->points[i].angle <= deg_to_rad(-85) ){ //LEFT
+                out[4] += scan->points[i].range;
+                temp_cnt[4]+=1;
+            }
         }
     }
-    for (int i = 1; i < 4; i++){
-        out[i] = out[i] / temp_cnt[i];
-    }
-    // memset(out, 0, sizeof(out));
-    // out[0] = -1;
-    // int temp_cnt[5] = {0};
     // for (int i = 0; i < scan->npoints; i++){
-    //     if (-0.523599< scan->points[i].angle && scan->points[i].angle< 0.523599){ //-30 to 30
+    //     if ( -0.174533 < scan->points[i].angle && scan->points[i].angle < 0.174533) { //FRONT
     //         out[1] += scan->points[i].range;
-    //         temp_cnt[1]+=1;
-    //     } else if (1.0472 < scan->points[i].angle && scan->points[i].angle< 2.0944){ // 60 to 120
+    //         temp_cnt[1] += 1;
+    //     } else if (1.39626 < scan->points[i].angle && scan->points[i].angle < 1.74533) { //RIGHT
     //         out[2] += scan->points[i].range;
-    //         temp_cnt[2]+=1;
-    //     } else if (2.61799 < scan->points[i].angle && scan->points[i].angle< 3.14159
-    //             ||-3.14159 < scan->points[i].angle && scan->points[i].angle< -2.61799 ){ // 150 to 180 or -180 to -150
+    //         temp_cnt[2] += 1;
+    //     } else if (2.96706 < scan->points[i].angle && scan->points[i].angle <3.14159
+    //             || -3.14159 < scan->points[i].angle && scan->points[i].angle< -2.96706) { //BACK
     //         out[3] += scan->points[i].range;
-    //         temp_cnt[3]+=1;
-    //     } else if (-2.0944 < scan->points[i].angle && scan->points[i].angle< -1.0472){ // -120 to -60
+    //         temp_cnt[3] += 1;
+    //     } else if (-1.74533 < scan->points[i].angle && scan->points[i].angle< -1.39626 ){ //LEFT
     //         out[4] += scan->points[i].range;
     //         temp_cnt[4]+=1;
     //     }
-    // }
-    // for (int i = 1; i <5; i++){
-    //     out[i] = out[i] / temp_cnt[i];
-    // }
-    printf("front range : %f/n", out[1]);
-    return out[1] > 1; 
+    for (int i = 1; i < 5; i++){
+        printf("out[i] %f, temp_cnt %d\n", out[i], temp_cnt[i]);
+        out[i] = fmin(out[i] / temp_cnt[i], 100.0);
+    }
+    printf("front: %f left %f right %f back %f", out[1], out[4], out[2], out[3]);
+    return out[1] > GOOD_RANGE; 
 }
 
 
@@ -272,7 +268,7 @@ int main(int argc, const char *argv[]) {
     int16_t leftVel = 100;
     
     // Turn State Variables
-    int ticks = DegToEncoderTicks(90.0);
+    int ticks = DegToEncoderTicks(89.0);
     uint32_t left = 0; // Number of Encoder ticks accumulated by the left wheel
     uint32_t right = 0; // Number of Encoder ticks accumulated by the right wheel
     uint32_t current_left = 0;
@@ -280,7 +276,7 @@ int main(int argc, const char *argv[]) {
     uint32_t last_left = 0;
     uint32_t last_right = 0;
         
-    state_t state = Scanning;
+    state_t state = Stop;
     while (1) {
         switch (state) {
             case Stop:
@@ -289,13 +285,17 @@ int main(int argc, const char *argv[]) {
                 kobukiDriveDirect(0, 0);
                 sensors.leftWheelEncoder = 0;
                 sensors.rightWheelEncoder = 0;
-                if (read(new_socket, dir, buf_size) == buf_size) {
-                    printf("Received: %c", *dir);
+                if (ONLINE) {
+                    if (read(new_socket, dir, buf_size) == buf_size) {
+                        printf("Received: %c", *dir);
+                        state = Scanning;
+                    } else {
+                        kobukiDriveDirect(0, 0);
+                        perror("receive failed");
+                        exit(EXIT_FAILURE);
+                    }
+                } else{
                     state = Scanning;
-                } else {
-                    kobukiDriveDirect(0, 0);
-                    perror("receive failed");
-                    exit(EXIT_FAILURE);
                 }
                 break;
 
@@ -307,6 +307,7 @@ int main(int argc, const char *argv[]) {
                         kobukiSensorPoll(&sensors);
                         good_range = getAvg(&scan, avgs);
                         state = Send_scan;
+                        // state = Scanning; //for testing
                     }
                 } else {
                     fprintf(stderr, "Failed to get Lidar Data\n");
@@ -371,23 +372,24 @@ int main(int argc, const char *argv[]) {
                 if (!good_range) {
                     printf("--------WALL----------\n");
                     kobukiDriveDirect(0, 0);
-                    if (ONLINE){
-                        printf("------sending avg-----\n");
-                        pkt.timestamp = -2.0; // send signal that I need a direction
-                        if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
-                            kobukiDriveDirect(0, 0);
-                            perror("send failed");
-                            exit(EXIT_FAILURE);
-                        }
-                        fflush(stdout);
-                        state = Receive;
-                    } else {
-                        state = Choose_dir;
-                    }
+                    // if (ONLINE){
+                    //     printf("------sending avg-----\n");
+                    //     pkt.timestamp = -2.0; // send signal that I need a direction
+                    //     if (send(new_socket, &pkt, sizeof(struct packet), 0) == -1) {
+                    //         kobukiDriveDirect(0, 0);
+                    //         perror("send failed");
+                    //         exit(EXIT_FAILURE);
+                    //     }
+                    //     fflush(stdout);
+                    //     state = Receive;
+                    // } else {
+                    //     state = Choose_dir;
+                    // }
+                    state = Choose_dir;
             
                 } else {
                     state = Drive;
-                }
+                 }
                 break;
                 
             case Receive:
@@ -407,8 +409,9 @@ int main(int argc, const char *argv[]) {
             case Choose_dir:
                 printf("-------choosing Direction---------\n");
                 // go to longest distance
-                // avgs = [-1, 0, 90, 180, 270] 
+                // avgs = [-1, F, L, B, R] 
                 direction = avgs[2] > avgs[4] ? 'L' : 'R';
+                // direction = 'R';
                 state = Turn;
                 break;
 
@@ -430,14 +433,14 @@ int main(int argc, const char *argv[]) {
                 // }
                 
                 //kobukiDriveDirect(leftVel, rightVel);
-                kobukiDriveDirect(SPEED, SPEED + 10);
+                kobukiDriveDirect(SPEED, SPEED + 12);
                 state = Scanning;
                 break;
             
             case Turn: 
                 // Romi turns until the front range becomes large
                 if (direction == 'R') {
-                    printf("TURNING RIGHT...\n");
+                    printf("......TURNING RIGHT.......\n");
                     kobukiSensorPoll(&sensors);
                     left = 0; // Number of Encoder ticks accumulated by the left wheel
                     current_left = sensors.leftWheelEncoder;
@@ -452,7 +455,7 @@ int main(int argc, const char *argv[]) {
                     }
                     //printf("ticks to turn: %d, progress: (%d, %d) [%d %d]\n", ticks, left, right, sensors.leftWheelEncoder, sensors.rightWheelEncoder);
                 } else if (direction == 'L') {
-                    printf("TURNING LEFT...\n");
+                    printf(".......TURNING LEFT........\n");
                     kobukiSensorPoll(&sensors);
                     right = 0; // Number of Encoder ticks accumulated by the right wheel
                     current_right = sensors.rightWheelEncoder;
